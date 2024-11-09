@@ -219,7 +219,7 @@ fun AttractionItem(attraction: TouristAttraction) {
             Text(
                 text = attraction.description,
                 fontSize = 14.sp,
-                color = Color.Gray
+                color = Color.Black
             )
         }
     }
