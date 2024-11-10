@@ -29,7 +29,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        // 定义 attractions 列表
+
         val attractions = listOf(
             TouristAttraction(
                 "Yellow Crane Tower",
@@ -50,7 +50,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             Wuhan_Guide_HelperTheme {
-                MainScreen(attractions = attractions) // 传递 attractions 列表
+                MainScreen(attractions = attractions)
             }
         }
     }
@@ -64,18 +64,18 @@ fun MainScreen(attractions: List<TouristAttraction>) {
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(vertical = 8.dp)
         ) {
-            // Header Image and Category Buttons as the first item in LazyColumn
+
             item {
                 Column {
                     HeaderImage()
                     CategoryButtons()
                 }
             }
-            // Tourist Attraction List items
+
             items(attractions) { attraction ->
                 AttractionItem(attraction)
             }
-            // See More Button
+
             item {
                 Button(
                     onClick = { /* 查看更多逻辑 */ },
@@ -136,7 +136,7 @@ fun CategoryButtons() {
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)  // 设置两行之间的间隔
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         val row1Categories = listOf("Food", "Viewpoint", "Hotel")
         val row2Categories = listOf("Translate", "Emergency")
