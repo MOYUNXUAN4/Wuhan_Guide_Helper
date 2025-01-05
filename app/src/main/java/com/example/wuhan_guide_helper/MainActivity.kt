@@ -1,5 +1,6 @@
 package com.example.wuhan_guide_helper
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -17,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,11 +26,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.wuhan_guide_helper.ui.theme.Wuhan_Guide_HelperTheme
 
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-
 
         val attractions = listOf(
             TouristAttraction(
@@ -58,6 +60,8 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun MainScreen(attractions: List<TouristAttraction>) {
+    val context = LocalContext.current // 获取当前上下文
+
     Column(modifier = Modifier.fillMaxSize().padding(8.dp)) {
         TopBar()
         LazyColumn(
@@ -78,7 +82,10 @@ fun MainScreen(attractions: List<TouristAttraction>) {
 
             item {
                 Button(
-                    onClick = { /* 查看更多逻辑 */ },
+                    onClick = {
+                        val intent = Intent(context, ViewpointActivity::class.java) // 使用获取的context
+                        context.startActivity(intent) // 启动活动
+                    },
                     shape = RoundedCornerShape(50),
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB497BD)),
                     modifier = Modifier
@@ -132,15 +139,15 @@ fun HeaderImage() {
 
 @Composable
 fun CategoryButtons() {
+    val row1Categories = listOf("Food", "Viewpoint", "Hotel")
+    val row2Categories = listOf("Translate", "Emergency")
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        val row1Categories = listOf("Food", "Viewpoint", "Hotel")
-        val row2Categories = listOf("Translate", "Emergency")
-
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
@@ -163,6 +170,7 @@ fun CategoryButtons() {
 
 @Composable
 fun CategoryButton(category: String) {
+    val context = LocalContext.current  // 获取当前上下文
     val iconRes = when (category) {
         "Food" -> R.drawable.ic_restaurant_btn
         "Viewpoint" -> R.drawable.ic_viewpoint_btn
@@ -173,7 +181,14 @@ fun CategoryButton(category: String) {
     }
 
     Button(
-        onClick = { /* 按钮逻辑 */ },
+        onClick = {
+            if (category == "Viewpoint" ) {
+                // 跳转到 ViewpointActivity
+                val intent = Intent(context, ViewpointActivity::class.java)
+                context.startActivity(intent)
+            }
+            // 其他按钮逻辑
+        },
         shape = RoundedCornerShape(50),
         colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB497BD)),
         modifier = Modifier
@@ -189,7 +204,6 @@ fun CategoryButton(category: String) {
         Text(text = category, fontSize = 12.sp)
     }
 }
-
 
 @Composable
 fun AttractionItem(attraction: TouristAttraction) {
@@ -237,6 +251,7 @@ fun MainScreenPreview() {
     )
     MainScreen(attractions = attractions)
 }
+
 
 
 

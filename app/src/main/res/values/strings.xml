@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Wuhan_Guide_Helper</string>
+    <string name="viewpoint_activity_label" />
 </resources>
