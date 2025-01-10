@@ -1,4 +1,12 @@
 <resources>
+    <string name="main_screen_activity_label">Main Screen</string>
+    <string name="context_activity_label">Context</string>
     <string name="app_name">Wuhan_Guide_Helper</string>
     <string name="viewpoint_activity_label" />
+    <string name="sunrise_at_lingbo_gate">Sunrise at Lingbo Gate</string>
+    <string name="sunRiseAtLingboGateDescription">At Lingbo Gate, the sunrise paints the sky with hues of gold and crimson, casting a tranquil glow over the Yangtze River, where waves gently dance to the morning\'s first light.</string>
+    <string name="yellow_crane_tower">Yellow Crane Tower</string>
+    <string name="yellow_crane_tower_Description">The Yellow Crane Tower rises over Wuhan, a timeless sentinel, watching the Yangtze flow beneath golden eaves.</string>
+    <string name="wuhan_university_sakura">Wuhan University Sakura</string>
+    <string name="wuhan_university_sakura_Description">At Wuhan University, cherry blossoms bloom like delicate pink clouds, weaving a fleeting dream of spring across the ancient campus.</string>
 </resources>

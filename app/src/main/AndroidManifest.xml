@@ -25,11 +25,27 @@
             </intent-filter>
         </activity>
 
+        <!-- MainScreenActivity -->
+        <activity
+            android:name=".MainScreenActivity"
+            android:exported="true"
+            android:label="@string/main_screen_activity_label"
+            android:theme="@style/Theme.Wuhan_Guide_Helper">
+        </activity>
+
         <!-- ViewpointActivity -->
         <activity
             android:name=".ViewpointActivity"
             android:exported="true"
             android:label="@string/viewpoint_activity_label"
+            android:theme="@style/Theme.Wuhan_Guide_Helper">
+        </activity>
+
+        <!-- ContextActivity -->
+        <activity
+            android:name=".ContextActivity"
+            android:exported="true"
+            android:label="@string/context_activity_label"
             android:theme="@style/Theme.Wuhan_Guide_Helper">
         </activity>
 
