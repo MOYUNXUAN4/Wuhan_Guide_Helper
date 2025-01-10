@@ -3,13 +3,23 @@ buildscript {
     extra.apply {
         set("room_version", "2.6.0")
     }
+
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath("com.android.tools.build:gradle:8.6.0") // Android Gradle 插件
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.20") // Kotlin 插件
+    }
 }
 
 plugins {
     id("com.android.application") version "8.6.0" apply false
     id("com.android.library") version "8.6.0" apply false
-    id("org.jetbrains.kotlin.android") version "2.1.0" apply false
-    id("org.jetbrains.kotlin.plugin.compose") version "2.1.0" apply false
+    id("org.jetbrains.kotlin.android") version "1.9.20" apply false
+    id("org.jetbrains.kotlin.kapt") version "1.9.20" apply false // 添加 kapt 插件
 }
 
 tasks.register("clean", Delete::class) {
