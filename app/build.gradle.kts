@@ -63,6 +63,8 @@ dependencies {
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    implementation ("com.google.accompanist:accompanist-pager:0.28.0") // 请使用最新版本
+    implementation ("com.google.accompanist:accompanist-pager-indicators:0.28.0" )// 用于显示指示器
 
 
     // Room dependencies

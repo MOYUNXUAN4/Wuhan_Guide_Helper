@@ -13,6 +13,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -26,6 +27,11 @@ import androidx.compose.ui.unit.sp
 import com.example.wuhan_guide_helper.databaseUi.ContextActivity
 import com.example.wuhan_guide_helper.internet.TransferActivity
 import com.example.wuhan_guide_helper.ui.theme.Wuhan_Guide_HelperTheme
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.HorizontalPagerIndicator
+import com.google.accompanist.pager.rememberPagerState
+import kotlinx.coroutines.delay
 
 class MainScreenActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -115,17 +121,61 @@ fun TopBar() {
     }
 }
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun HeaderImage() {
-    Image(
-        painter = painterResource(id = R.drawable.dq5),
-        contentDescription = "Header Image",
-        contentScale = ContentScale.Crop,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(240.dp)
-            .clip(RoundedCornerShape(32.dp))
+    // 图片资源列表
+    val images = listOf(
+        R.drawable.dq5,
+        R.drawable.dq4,
+        R.drawable.hh2,
+        R.drawable.lb6,
+        R.drawable.lb1,
+        R.drawable.sa4
     )
+
+    // Pager 状态
+    val pagerState = rememberPagerState()
+
+    // 自动轮播逻辑
+    LaunchedEffect(pagerState) {
+        while (true) {
+            delay(3000) // 3 秒切换一次
+            val nextPage = (pagerState.currentPage + 1) % images.size
+            pagerState.animateScrollToPage(nextPage)
+        }
+    }
+
+    Column {
+        // 横向滑动图片
+        HorizontalPager(
+            count = images.size,
+            state = pagerState,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(240.dp)
+        ) { page ->
+            Image(
+                painter = painterResource(id = images[page]),
+                contentDescription = "Header Image $page",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(240.dp)
+                    .clip(RoundedCornerShape(32.dp))
+            )
+        }
+
+        // 添加指示器
+        HorizontalPagerIndicator(
+            pagerState = pagerState,
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally)
+                .padding(8.dp),
+            activeColor = Color(0xFFB497BD), // 修改为指定的颜色
+            inactiveColor = Color(0xFFB497BD).copy(alpha = 0.4f) // 使用相同颜色但降低透明度
+        )
+    }
 }
 
 @Composable
