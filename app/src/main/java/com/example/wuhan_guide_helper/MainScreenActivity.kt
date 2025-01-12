@@ -24,6 +24,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.wuhan_guide_helper.databaseUi.ContextActivity
+import com.example.wuhan_guide_helper.internet.TransferActivity
 import com.example.wuhan_guide_helper.ui.theme.Wuhan_Guide_HelperTheme
 
 class MainScreenActivity : ComponentActivity() {
@@ -177,6 +178,11 @@ fun CategoryButton(category: String, onSeeMoreClick: () -> Unit) {
                 "Emergency" -> {
                     // 跳转到 ContextActivity
                     val intent = Intent(context, ContextActivity::class.java)
+                    context.startActivity(intent)
+                }
+                "Translate" -> {
+                    // 跳转到 TransferActivity
+                    val intent = Intent(context, TransferActivity::class.java)
                     context.startActivity(intent)
                 }
             }
