@@ -1,5 +1,7 @@
 package com.example.wuhan_guide_helper
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -19,6 +21,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.wuhan_guide_helper.ViewPointActivity.TowerActivity
 import com.example.wuhan_guide_helper.ui.theme.Wuhan_Guide_HelperTheme
 
 data class ViewPoint(
@@ -32,7 +35,7 @@ class ViewpointActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             Wuhan_Guide_HelperTheme {
-                ViewPointScreen(viewPoints = generateViewPoints())
+                ViewPointScreen(viewPoints = generateViewPoints(), context = this)
             }
         }
     }
@@ -40,7 +43,7 @@ class ViewpointActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ViewPointScreen(viewPoints: List<ViewPoint>) {
+fun ViewPointScreen(viewPoints: List<ViewPoint>, context: Context) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -66,14 +69,22 @@ fun ViewPointScreen(viewPoints: List<ViewPoint>) {
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(viewPoints) { viewPoint ->
-                ViewPointCard(viewPoint)
+                ViewPointCard(
+                    viewPoint = viewPoint,
+                    onClick = {
+                        if (viewPoint.name == "Yellow Crane Tower") {
+                            val intent = Intent(context, TowerActivity::class.java)
+                            context.startActivity(intent)
+                        }
+                    }
+                )
             }
         }
     }
 }
 
 @Composable
-fun ViewPointCard(viewPoint: ViewPoint) {
+fun ViewPointCard(viewPoint: ViewPoint, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -87,19 +98,17 @@ fun ViewPointCard(viewPoint: ViewPoint) {
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
-            verticalAlignment = Alignment.Top // 保持内容顶部对齐
+            verticalAlignment = Alignment.Top
         ) {
-            // 调整后的图片部分
             Image(
                 painter = painterResource(id = viewPoint.imageRes),
                 contentDescription = viewPoint.name,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .size(width = 120.dp, height = 160.dp) // 更高的长方形比例
+                    .size(width = 120.dp, height = 160.dp)
                     .clip(RoundedCornerShape(12.dp))
             )
             Spacer(modifier = Modifier.width(16.dp))
-            // 文本和按钮部分
             Column(
                 modifier = Modifier.weight(1f)
             ) {
@@ -115,7 +124,7 @@ fun ViewPointCard(viewPoint: ViewPoint) {
                 )
                 Spacer(modifier = Modifier.height(16.dp))
                 Button(
-                    onClick = { /* TODO: Add navigation logic */ },
+                    onClick = onClick, // 使用传入的 onClick 回调
                     modifier = Modifier.align(Alignment.End),
                     shape = RoundedCornerShape(50),
                     colors = ButtonDefaults.buttonColors(

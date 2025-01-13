@@ -17,6 +17,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -74,23 +75,60 @@ class MainScreenActivity : ComponentActivity() {
 fun MainScreen(attractions: List<TouristAttraction>, onSeeMoreClick: () -> Unit) {
     val context = LocalContext.current
 
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(8.dp)) {
-        TopBar()
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(vertical = 8.dp)
-        ) {
-            item {
-                Column {
-                    HeaderImage()
-                    CategoryButtons(onSeeMoreClick = onSeeMoreClick)
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier
+            .fillMaxSize()
+            .padding(8.dp)) {
+            TopBar()
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(vertical = 8.dp)
+            ) {
+                item {
+                    Column {
+                        HeaderImage()
+                        CategoryButtons(onSeeMoreClick = onSeeMoreClick)
+                    }
+                }
+
+                items(attractions) { attraction ->
+                    AttractionItem(attraction)
                 }
             }
+        }
 
-            items(attractions) { attraction ->
-                AttractionItem(attraction)
+        // 悬浮按钮
+        Box(
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(end = 16.dp, bottom = 80.dp)
+        ) {
+            Button(
+                onClick = onSeeMoreClick,
+                shape = RoundedCornerShape(32.dp), // 使用与 HeaderImage 相同的圆角形状
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFB497BD) // 恢复为纯色背景
+                ),
+                modifier = Modifier
+                    .width(120.dp) // 设置宽度
+                    .height(48.dp), // 设置高度
+                elevation = ButtonDefaults.buttonElevation(
+                    defaultElevation = 8.dp, // 默认阴影
+                    pressedElevation = 12.dp // 按下时的阴影
+                )
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.baseline_more_horiz_24),
+                        contentDescription = "See More",
+                        tint = Color.White,
+                        modifier = Modifier.size(32.dp) // 放大图标
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                }
             }
         }
     }

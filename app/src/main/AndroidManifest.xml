@@ -58,6 +58,11 @@
             android:theme="@style/Theme.Wuhan_Guide_Helper">
         </activity>
 
+        <activity android:name=".ViewPointActivity.TowerActivity"
+            android:theme="@style/Theme.Wuhan_Guide_Helper" />
+
+
+
 
 
     </application>
