@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "16470118565",
+    "project_id": "wuhantravelguide",
+    "storage_bucket": "wuhantravelguide.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:16470118565:android:93e7f48e30a311e012bd4c",
+        "android_client_info": {
+          "package_name": "com.example.wuhan_guide_helper"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSIwm4tgDlx7axdIA6AExz76Z4z2CbF9A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

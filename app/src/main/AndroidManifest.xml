@@ -63,6 +63,16 @@
 
 
 
+        <activity
+            android:name="com.example.wuhan_guide_helper.user.UserSignIn"
+            android:exported="true"
+            android:theme="@style/Theme.Wuhan_Guide_Helper" />
+        <activity
+            android:name="com.example.wuhan_guide_helper.user.UserRegister"
+            android:exported="true"
+            android:theme="@style/Theme.Wuhan_Guide_Helper" />
+
+        <activity android:name=".user.UserDetailActivity" />
 
 
     </application>

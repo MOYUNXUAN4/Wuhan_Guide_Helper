@@ -2,6 +2,8 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("kotlin-kapt") // 应用 kapt 插件
+    id("com.google.gms.google-services")
+
 }
 
 android {
@@ -51,6 +53,7 @@ android {
 }
 
 dependencies {
+    // Jetpack Compose BOM
     implementation(platform("androidx.compose:compose-bom:2024.12.01"))
     implementation("androidx.activity:activity-compose:1.9.3")
     implementation("androidx.compose.material3:material3")
@@ -60,21 +63,29 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
     implementation("androidx.navigation:navigation-compose:2.8.5")
-    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
-    implementation ("com.google.accompanist:accompanist-pager:0.28.0") // 请使用最新版本
-    implementation ("com.google.accompanist:accompanist-pager-indicators:0.28.0" )// 用于显示指示器
+    implementation("androidx.compose.runtime:runtime-livedata:1.4.0")
 
+    // Firebase BOM
+    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
+    implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-firestore-ktx")
 
-    // Room dependencies
+    // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+
+    // Accompanist
+    implementation("com.google.accompanist:accompanist-pager:0.28.0")
+    implementation("com.google.accompanist:accompanist-pager-indicators:0.28.0")
+
+    // Room
     implementation("androidx.room:room-runtime:${rootProject.extra["room_version"]}")
     kapt("androidx.room:room-compiler:${rootProject.extra["room_version"]}") // 使用 kapt
     implementation("androidx.room:room-ktx:${rootProject.extra["room_version"]}")
-
-    // Jetpack Compose
-    implementation("androidx.compose.runtime:runtime-livedata:1.4.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
 
     // 测试依赖
     testImplementation("junit:junit:4.13.2")
@@ -84,6 +95,4 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-
-
 }

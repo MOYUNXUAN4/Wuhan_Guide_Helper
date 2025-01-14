@@ -2,6 +2,7 @@ package com.example.wuhan_guide_helper
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -12,12 +13,10 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -25,16 +24,26 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.wuhan_guide_helper.user.UserSignIn
 import com.example.wuhan_guide_helper.databaseUi.ContextActivity
 import com.example.wuhan_guide_helper.internet.TransferActivity
 import com.example.wuhan_guide_helper.ui.theme.Wuhan_Guide_HelperTheme
+import com.example.wuhan_guide_helper.user.UserDetailActivity
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.rememberPagerState
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.tasks.await
 
 class MainScreenActivity : ComponentActivity() {
+    private lateinit var auth: FirebaseAuth
+    private val db = FirebaseFirestore.getInstance()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
@@ -59,8 +68,21 @@ class MainScreenActivity : ComponentActivity() {
 
         setContent {
             Wuhan_Guide_HelperTheme {
+                var username by remember { mutableStateOf("") } // 用户名状态
+
+                // 获取当前用户的用户名
+                LaunchedEffect(Unit) {
+                    val user = Firebase.auth.currentUser
+                    if (user != null) {
+                        val userId = user.uid
+                        val userDoc = db.collection("users").document(userId).get().await()
+                        username = userDoc.getString("username") ?: "User"
+                    }
+                }
+
                 MainScreen(
                     attractions = attractions,
+                    username = username, // 传递用户名
                     onSeeMoreClick = {
                         val intent = Intent(this, ViewpointActivity::class.java)
                         startActivity(intent)
@@ -72,14 +94,18 @@ class MainScreenActivity : ComponentActivity() {
 }
 
 @Composable
-fun MainScreen(attractions: List<TouristAttraction>, onSeeMoreClick: () -> Unit) {
+fun MainScreen(
+    attractions: List<TouristAttraction>,
+    username: String, // 接收用户名
+    onSeeMoreClick: () -> Unit
+) {
     val context = LocalContext.current
 
     Box(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier
             .fillMaxSize()
             .padding(8.dp)) {
-            TopBar()
+            TopBar(username = username) // 传递用户名到 TopBar
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(vertical = 8.dp)
@@ -105,16 +131,16 @@ fun MainScreen(attractions: List<TouristAttraction>, onSeeMoreClick: () -> Unit)
         ) {
             Button(
                 onClick = onSeeMoreClick,
-                shape = RoundedCornerShape(32.dp), // 使用与 HeaderImage 相同的圆角形状
+                shape = RoundedCornerShape(32.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFB497BD) // 恢复为纯色背景
+                    containerColor = Color(0xFFB497BD)
                 ),
                 modifier = Modifier
-                    .width(120.dp) // 设置宽度
-                    .height(48.dp), // 设置高度
+                    .width(120.dp)
+                    .height(48.dp),
                 elevation = ButtonDefaults.buttonElevation(
-                    defaultElevation = 8.dp, // 默认阴影
-                    pressedElevation = 12.dp // 按下时的阴影
+                    defaultElevation = 8.dp,
+                    pressedElevation = 12.dp
                 )
             ) {
                 Row(
@@ -125,7 +151,7 @@ fun MainScreen(attractions: List<TouristAttraction>, onSeeMoreClick: () -> Unit)
                         painter = painterResource(id = R.drawable.baseline_more_horiz_24),
                         contentDescription = "See More",
                         tint = Color.White,
-                        modifier = Modifier.size(32.dp) // 放大图标
+                        modifier = Modifier.size(32.dp)
                     )
                     Spacer(modifier = Modifier.width(8.dp))
                 }
@@ -135,11 +161,16 @@ fun MainScreen(attractions: List<TouristAttraction>, onSeeMoreClick: () -> Unit)
 }
 
 @Composable
-fun TopBar() {
+fun TopBar(username: String) {
+    val context = LocalContext.current
+    val auth = Firebase.auth
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .height(64.dp)
             .padding(8.dp),
+        verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.End
     ) {
         IconButton(onClick = { /* 切换夜间模式 */ }) {
@@ -149,7 +180,34 @@ fun TopBar() {
                 modifier = Modifier.size(24.dp)
             )
         }
-        IconButton(onClick = { /* 用户配置逻辑 */ }) {
+        Spacer(modifier = Modifier.width(16.dp)) // 增加间距
+        Text(
+            text = username, // 显示用户名
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.padding(end = 8.dp)
+        )
+        IconButton(
+            onClick = {
+                Log.d("TopBar", "User icon clicked")
+                try {
+                    val user = auth.currentUser
+                    if (user != null) {
+                        // 用户已登录，跳转到 UserDetail 界面
+                        val intent = Intent(context, UserDetailActivity::class.java)
+                        intent.putExtra("email", user.email) // 传递邮箱
+                        intent.putExtra("username", username) // 传递用户名
+                        context.startActivity(intent)
+                    } else {
+                        // 用户未登录，跳转到登录界面
+                        val intent = Intent(context, UserSignIn::class.java)
+                        context.startActivity(intent)
+                    }
+                } catch (e: Exception) {
+                    Log.e("TopBar", "Failed to start activity", e)
+                }
+            },
+            modifier = Modifier.background(Color.Transparent)
+        ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_user),
                 contentDescription = "User",
@@ -162,7 +220,6 @@ fun TopBar() {
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun HeaderImage() {
-    // 图片资源列表
     val images = listOf(
         R.drawable.dq5,
         R.drawable.dq4,
@@ -172,20 +229,17 @@ fun HeaderImage() {
         R.drawable.sa4
     )
 
-    // Pager 状态
     val pagerState = rememberPagerState()
 
-    // 自动轮播逻辑
     LaunchedEffect(pagerState) {
         while (true) {
-            delay(3000) // 3 秒切换一次
+            delay(3000)
             val nextPage = (pagerState.currentPage + 1) % images.size
             pagerState.animateScrollToPage(nextPage)
         }
     }
 
     Column {
-        // 横向滑动图片
         HorizontalPager(
             count = images.size,
             state = pagerState,
@@ -204,14 +258,13 @@ fun HeaderImage() {
             )
         }
 
-        // 添加指示器
         HorizontalPagerIndicator(
             pagerState = pagerState,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(8.dp),
-            activeColor = Color(0xFFB497BD), // 修改为指定的颜色
-            inactiveColor = Color(0xFFB497BD).copy(alpha = 0.4f) // 使用相同颜色但降低透明度
+            activeColor = Color(0xFFB497BD),
+            inactiveColor = Color(0xFFB497BD).copy(alpha = 0.4f)
         )
     }
 }
@@ -262,14 +315,12 @@ fun CategoryButton(category: String, onSeeMoreClick: () -> Unit) {
     Button(
         onClick = {
             when (category) {
-                "Viewpoint" -> onSeeMoreClick() // 调用传入的 onSeeMoreClick 处理 "Viewpoint" 按钮点击
+                "Viewpoint" -> onSeeMoreClick()
                 "Emergency" -> {
-                    // 跳转到 ContextActivity
                     val intent = Intent(context, ContextActivity::class.java)
                     context.startActivity(intent)
                 }
                 "Translate" -> {
-                    // 跳转到 TransferActivity
                     val intent = Intent(context, TransferActivity::class.java)
                     context.startActivity(intent)
                 }
