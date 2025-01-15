@@ -3,6 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+
 
     <application
         android:name=".MyApplication"
@@ -18,7 +23,7 @@
 
         <!-- MainActivity -->
         <activity
-            android:name=".databaseUi.MainActivity"
+            android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/Theme.Wuhan_Guide_Helper">
             <intent-filter>
@@ -58,7 +63,7 @@
             android:theme="@style/Theme.Wuhan_Guide_Helper">
         </activity>
 
-        <activity android:name=".ViewPointActivity.TowerActivity"
+        <activity android:name=".ViewPointActivity.Tower.TowerActivity"
             android:theme="@style/Theme.Wuhan_Guide_Helper" />
 
 
@@ -73,6 +78,15 @@
             android:theme="@style/Theme.Wuhan_Guide_Helper" />
 
         <activity android:name=".user.UserDetailActivity" />
+
+        <activity
+            android:name=".ViewPointActivity.Tower.TowerActivityLocation"
+            android:exported="true">
+        </activity>
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBag8SGsW4HGLWEWCwoky0_d3CRhfko6wY=" />
 
 
     </application>

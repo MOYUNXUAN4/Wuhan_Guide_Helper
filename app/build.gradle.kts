@@ -64,6 +64,12 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
     implementation("androidx.navigation:navigation-compose:2.8.5")
     implementation("androidx.compose.runtime:runtime-livedata:1.4.0")
+    implementation ("androidx.navigation:navigation-compose:2.7.7")
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+    implementation("com.google.maps.android:maps-compose:4.3.0")
+    // Google Play Services Maps
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+
 
     // Firebase BOM
     implementation(platform("com.google.firebase:firebase-bom:33.7.0"))

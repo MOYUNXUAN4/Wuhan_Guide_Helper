@@ -173,14 +173,6 @@ fun TopBar(username: String) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.End
     ) {
-        IconButton(onClick = { /* 切换夜间模式 */ }) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_night_mode),
-                contentDescription = "Night Mode",
-                modifier = Modifier.size(24.dp)
-            )
-        }
-        Spacer(modifier = Modifier.width(16.dp)) // 增加间距
         Text(
             text = username, // 显示用户名
             style = MaterialTheme.typography.bodyLarge,
