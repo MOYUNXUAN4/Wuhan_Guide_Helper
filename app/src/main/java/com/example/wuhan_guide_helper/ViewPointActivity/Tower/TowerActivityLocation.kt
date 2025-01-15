@@ -197,15 +197,13 @@ fun TowerLocationScreen(onSearchClick: () -> Unit) {
 
 @Composable
 fun TowerMap() {
-    // 黄鹤楼的经纬度
     val yellowCraneTower = LatLng(30.544505702632577, 114.3023649295135)
 
-    // 设置地图的初始镜头位置
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(yellowCraneTower, 15f)
     }
 
-    // 使用 Box 包裹地图，并添加圆角效果
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -213,12 +211,10 @@ fun TowerMap() {
             .padding(8.dp)
             .clip(RoundedCornerShape(16.dp)) // 设置圆角
     ) {
-        // 显示地图
         GoogleMap(
             modifier = Modifier.fillMaxSize(),
             cameraPositionState = cameraPositionState
         ) {
-            // 在地图上添加标记
             Marker(
                 state = MarkerState(position = yellowCraneTower),
                 title = "Yellow Crane Tower"
