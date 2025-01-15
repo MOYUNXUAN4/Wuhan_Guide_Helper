@@ -6,7 +6,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.wuhan_guide_helper.MainScreenActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -25,19 +27,46 @@ fun UserDetail(email: String, username: String) {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // 显示用户邮箱
+        // 添加标题
         Text(
-            text = "Email: $email",
-            style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(bottom = 8.dp)
+            text = "User Details",
+            style = MaterialTheme.typography.displaySmall.copy(
+                fontWeight = FontWeight.Bold,
+                color = Color.Black // 黑色
+            ),
+            modifier = Modifier.padding(bottom = 24.dp)
         )
 
-        // 显示用户名
-        Text(
-            text = "Username: $username",
-            style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.padding(bottom = 16.dp)
-        )
+        // 使用 Card 组件包裹用户信息
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                // 显示用户邮箱
+                Text(
+                    text = "Email: $email",
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+
+                // 显示用户名
+                Text(
+                    text = "Username: $username",
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(bottom = 16.dp)
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
 
         // 登出按钮
         Button(
@@ -47,7 +76,12 @@ fun UserDetail(email: String, username: String) {
                 intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK
                 context.startActivity(intent) // 跳转到主界面
             },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFFB497BD) // 设置按钮背景颜色为 #B497BD
+            )
         ) {
             Text("Logout")
         }

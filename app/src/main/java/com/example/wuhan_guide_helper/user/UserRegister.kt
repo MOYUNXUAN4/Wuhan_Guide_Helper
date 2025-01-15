@@ -10,12 +10,18 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.example.wuhan_guide_helper.R
 import com.example.wuhan_guide_helper.ui.theme.Wuhan_Guide_HelperTheme
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
@@ -89,7 +95,29 @@ class UserRegister : ComponentActivity() {
                         .set(userData)
                         .addOnSuccessListener {
                             println("User data saved!")
-                            onSuccess()
+                            // 设置 Firebase 用户的 displayName
+                            val profileUpdates = UserProfileChangeRequest.Builder()
+                                .setDisplayName(username) // 设置用户名
+                                .build()
+
+                            user?.updateProfile(profileUpdates)?.addOnCompleteListener { updateTask ->
+                                if (updateTask.isSuccessful) {
+                                    println("Display name updated!")
+                                    // 重新加载用户信息以确保 displayName 生效
+                                    user.reload().addOnCompleteListener { reloadTask ->
+                                        if (reloadTask.isSuccessful) {
+                                            println("User reloaded!")
+                                            onSuccess()
+                                        } else {
+                                            println("Failed to reload user: ${reloadTask.exception?.message}")
+                                            onError("Failed to reload user: ${reloadTask.exception?.message}")
+                                        }
+                                    }
+                                } else {
+                                    println("Failed to update display name: ${updateTask.exception?.message}")
+                                    onError("Failed to update display name: ${updateTask.exception?.message}")
+                                }
+                            }
                         }
                         .addOnFailureListener { e ->
                             println("Failed to save user data: ${e.message}")
@@ -121,7 +149,15 @@ fun UserRegisterScreen(
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var confirmPassword by remember { mutableStateOf("") } // 第二次密码输入框
     var username by remember { mutableStateOf("") } // 用户名输入框
+
+    // 控制密码是否可见的状态
+    var isPasswordVisible by remember { mutableStateOf(false) }
+    var isConfirmPasswordVisible by remember { mutableStateOf(false) }
+
+    // 引入 coroutineScope
+    val coroutineScope = rememberCoroutineScope()
 
     Column(
         modifier = Modifier
@@ -130,6 +166,16 @@ fun UserRegisterScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // 添加艺术字体标题 "Join Us Now!"
+        Text(
+            text = "Join Us Now!",
+            style = MaterialTheme.typography.displayMedium.copy(
+                fontWeight = FontWeight.Bold,
+                color = Color(0xFFB497BD) // 使用十六进制颜色值
+            ),
+            modifier = Modifier.padding(bottom = 32.dp)
+        )
+
         // 用户名输入框
         OutlinedTextField(
             value = username,
@@ -157,7 +203,39 @@ fun UserRegisterScreen(
             onValueChange = { password = it },
             label = { Text("Password") },
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
-            visualTransformation = PasswordVisualTransformation(),
+            visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            trailingIcon = {
+                IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
+                    Icon(
+                        painter = painterResource(
+                            id = if (isPasswordVisible) R.drawable.ic_visibility_off else R.drawable.ic_visibility
+                        ),
+                        contentDescription = if (isPasswordVisible) "Hide password" else "Show password"
+                    )
+                }
+            },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // 确认密码输入框
+        OutlinedTextField(
+            value = confirmPassword,
+            onValueChange = { confirmPassword = it },
+            label = { Text("Confirm Password") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            visualTransformation = if (isConfirmPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+            trailingIcon = {
+                IconButton(onClick = { isConfirmPasswordVisible = !isConfirmPasswordVisible }) {
+                    Icon(
+                        painter = painterResource(
+                            id = if (isConfirmPasswordVisible) R.drawable.ic_visibility_off else R.drawable.ic_visibility
+                        ),
+                        contentDescription = if (isConfirmPasswordVisible) "Hide password" else "Show password"
+                    )
+                }
+            },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -165,9 +243,25 @@ fun UserRegisterScreen(
 
         // 注册按钮
         Button(
-            onClick = { onRegisterClick(email, password, username) },
+            onClick = {
+                // 检查所有输入框是否都已填写
+                if (username.isBlank() || email.isBlank() || password.isBlank() || confirmPassword.isBlank()) {
+                    coroutineScope.launch {
+                        snackbarHostState.showSnackbar("Please fill in all fields.")
+                    }
+                } else if (password != confirmPassword) {
+                    coroutineScope.launch {
+                        snackbarHostState.showSnackbar("Passwords do not match.")
+                    }
+                } else {
+                    onRegisterClick(email, password, username)
+                }
+            },
             modifier = Modifier.fillMaxWidth(),
-            enabled = !isLoading
+            enabled = !isLoading,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFFB497BD) // 设置按钮背景颜色为 #B497BD
+            )
         ) {
             if (isLoading) {
                 CircularProgressIndicator(color = MaterialTheme.colorScheme.onPrimary)

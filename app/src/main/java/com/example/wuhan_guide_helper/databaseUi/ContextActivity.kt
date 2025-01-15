@@ -1,6 +1,7 @@
 package com.example.wuhan_guide_helper.databaseUi
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -31,21 +32,20 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Observer
 import com.example.wuhan_guide_helper.MyApplication
 import com.example.wuhan_guide_helper.database.Review
 import com.example.wuhan_guide_helper.database.ReviewRepository
-import com.example.wuhan_guide_helper.database.AppDatabase
 import com.example.wuhan_guide_helper.databaseUi.ReviewViewModel
 import com.example.wuhan_guide_helper.databaseUi.ReviewViewModelFactory
+import com.google.firebase.auth.FirebaseAuth
 
 class ContextActivity : ComponentActivity() {
 
@@ -194,7 +194,7 @@ fun AddReviewScreen(
 ) {
     var location by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
-    var name by remember { mutableStateOf("") }
+    val context = LocalContext.current
 
     Column(
         modifier = Modifier
@@ -202,30 +202,35 @@ fun AddReviewScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
+        // 输入地点
         OutlinedTextField(
             value = location,
             onValueChange = { location = it },
             label = { Text("Location") },
             modifier = Modifier.fillMaxWidth()
         )
+
+        // 输入评价
         OutlinedTextField(
             value = description,
             onValueChange = { description = it },
             label = { Text("Description") },
             modifier = Modifier.fillMaxWidth()
         )
-        OutlinedTextField(
-            value = name,
-            onValueChange = { name = it },
-            label = { Text("Name") },
-            modifier = Modifier.fillMaxWidth()
-        )
 
+        // 保存按钮
         Button(
             onClick = {
-                val review = Review(location = location, description = description, name = name)
-                reviewViewModel.insert(review)
-                onBack()
+                // 检查用户是否登录
+                val currentUser = FirebaseAuth.getInstance().currentUser
+                if (currentUser != null) {
+                    // 用户已登录，调用 ViewModel 的 insert 方法
+                    reviewViewModel.insert(location, description)
+                    onBack()
+                } else {
+                    // 用户未登录，显示提示
+                    Toast.makeText(context, "请登录", Toast.LENGTH_SHORT).show()
+                }
             },
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
@@ -233,6 +238,7 @@ fun AddReviewScreen(
             Text("Save Review")
         }
 
+        // 返回按钮
         Button(
             onClick = onBack,
             modifier = Modifier.fillMaxWidth(),
@@ -252,7 +258,6 @@ fun ReviewDetailScreen(
 ) {
     var updatedLocation by remember { mutableStateOf(review.location) }
     var updatedDescription by remember { mutableStateOf(review.description) }
-    var updatedName by remember { mutableStateOf(review.name) }
 
     Column(
         modifier = Modifier
@@ -265,31 +270,36 @@ fun ReviewDetailScreen(
             style = MaterialTheme.typography.headlineMedium,
             modifier = Modifier.fillMaxWidth()
         )
+
+        // 地点输入框
         OutlinedTextField(
             value = updatedLocation,
             onValueChange = { updatedLocation = it },
             label = { Text("Location") },
             modifier = Modifier.fillMaxWidth()
         )
+
+        // 描述输入框
         OutlinedTextField(
             value = updatedDescription,
             onValueChange = { updatedDescription = it },
             label = { Text("Description") },
             modifier = Modifier.fillMaxWidth()
         )
-        OutlinedTextField(
-            value = updatedName,
-            onValueChange = { updatedName = it },
-            label = { Text("Name") },
+
+        // 用户名显示（不可编辑）
+        Text(
+            text = "Name: ${review.name}",
+            style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.fillMaxWidth()
         )
 
+        // 修改按钮
         Button(
             onClick = {
                 val updatedReview = review.copy(
                     location = updatedLocation,
-                    description = updatedDescription,
-                    name = updatedName
+                    description = updatedDescription
                 )
                 onChange(updatedReview)
             },
@@ -299,6 +309,7 @@ fun ReviewDetailScreen(
             Text("Change")
         }
 
+        // 删除按钮
         Button(
             onClick = onDelete,
             modifier = Modifier.fillMaxWidth(),
@@ -307,6 +318,7 @@ fun ReviewDetailScreen(
             Text("Delete")
         }
 
+        // 返回按钮
         Button(
             onClick = onBack,
             modifier = Modifier.fillMaxWidth(),

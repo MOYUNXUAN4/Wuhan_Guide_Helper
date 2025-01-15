@@ -10,11 +10,14 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.example.wuhan_guide_helper.R
@@ -118,6 +121,17 @@ fun UserSignInScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        // 添加标题 "Wuhan Travel Guide Log In"
+        Text(
+            text = "Wuhan Travel Guide\nLog In", // 使用换行符 \n 分隔
+            style = MaterialTheme.typography.displayMedium.copy(
+                fontWeight = FontWeight.Bold,
+                color = Color.Black // 黑色
+            ),
+            textAlign = TextAlign.Center, // 文字居中
+            modifier = Modifier.padding(bottom = 32.dp)
+        )
+
         // 邮箱输入框
         OutlinedTextField(
             value = email,
@@ -155,7 +169,10 @@ fun UserSignInScreen(
         Button(
             onClick = { onLoginClick(email, password) },
             modifier = Modifier.fillMaxWidth(),
-            enabled = !isLoading
+            enabled = !isLoading,
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFFB497BD) // 设置按钮背景颜色为 #B497BD
+            )
         ) {
             if (isLoading) {
                 CircularProgressIndicator(color = MaterialTheme.colorScheme.onPrimary)
@@ -170,7 +187,9 @@ fun UserSignInScreen(
         Button(
             onClick = onRegisterClick,
             modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFFB497BD) // 设置按钮背景颜色为 #B497BD
+            )
         ) {
             Text("Register")
         }
