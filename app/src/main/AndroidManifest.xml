@@ -88,6 +88,10 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBag8SGsW4HGLWEWCwoky0_d3CRhfko6wY=" />
 
+        <activity
+            android:name=".foodActivity.FoodActivity"
+            android:exported="true">
+        </activity>
 
     </application>
 

@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.wuhan_guide_helper.user.UserSignIn
 import com.example.wuhan_guide_helper.databaseUi.ContextActivity
+import com.example.wuhan_guide_helper.foodActivity.FoodActivity
 import com.example.wuhan_guide_helper.internet.TransferActivity
 import com.example.wuhan_guide_helper.ui.theme.Wuhan_Guide_HelperTheme
 import com.example.wuhan_guide_helper.user.UserDetailActivity
@@ -307,6 +308,10 @@ fun CategoryButton(category: String, onSeeMoreClick: () -> Unit) {
     Button(
         onClick = {
             when (category) {
+                "Food" -> {
+                    val intent = Intent(context, FoodActivity::class.java)
+                    context.startActivity(intent)
+                }
                 "Viewpoint" -> onSeeMoreClick()
                 "Emergency" -> {
                     val intent = Intent(context, ContextActivity::class.java)
