@@ -265,7 +265,7 @@ fun HeaderImage() {
 @Composable
 fun CategoryButtons(onSeeMoreClick: () -> Unit) {
     val row1Categories = listOf("Food", "Viewpoint", "Hotel")
-    val row2Categories = listOf("Translate", "Emergency")
+    val row2Categories = listOf("Exchange", "Tips") // 修改后的分类
 
     Column(
         modifier = Modifier
@@ -300,8 +300,8 @@ fun CategoryButton(category: String, onSeeMoreClick: () -> Unit) {
         "Food" -> R.drawable.ic_restaurant_btn
         "Viewpoint" -> R.drawable.ic_viewpoint_btn
         "Hotel" -> R.drawable.ic_hotel_btn
-        "Translate" -> R.drawable.ic_transalate_btn
-        "Emergency" -> R.drawable.emergency
+        "Exchange" -> R.drawable.ic_transalate_btn // 使用原来的翻译图标
+        "Tips" -> R.drawable.emergency // 使用原来的紧急图标
         else -> R.drawable.default_icon
     }
 
@@ -313,11 +313,11 @@ fun CategoryButton(category: String, onSeeMoreClick: () -> Unit) {
                     context.startActivity(intent)
                 }
                 "Viewpoint" -> onSeeMoreClick()
-                "Emergency" -> {
+                "Tips" -> { // 修改为跳转到 Tips 页面
                     val intent = Intent(context, ContextActivity::class.java)
                     context.startActivity(intent)
                 }
-                "Translate" -> {
+                "Exchange" -> { // 修改为跳转到翻译页面
                     val intent = Intent(context, TransferActivity::class.java)
                     context.startActivity(intent)
                 }
@@ -338,7 +338,6 @@ fun CategoryButton(category: String, onSeeMoreClick: () -> Unit) {
         Text(text = category, fontSize = 12.sp)
     }
 }
-
 @Composable
 fun AttractionItem(attraction: TouristAttraction) {
     Row(

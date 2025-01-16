@@ -6,17 +6,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,9 +19,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.example.wuhan_guide_helper.R
+import com.example.wuhan_guide_helper.foodActivity.FoodActivity
 import com.example.wuhan_guide_helper.ui.theme.Wuhan_Guide_HelperTheme
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -35,7 +29,6 @@ import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.Marker
 import com.google.maps.android.compose.MarkerState
 import com.google.maps.android.compose.rememberCameraPositionState
-import java.time.format.TextStyle
 
 class TowerActivityLocation : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.O)
@@ -48,7 +41,8 @@ class TowerActivityLocation : ComponentActivity() {
                         // 跳转到 TowerActivity
                         val intent = Intent(this, TowerActivity::class.java)
                         startActivity(intent)
-                    }
+                    },
+                    context = this // 传递 context
                 )
             }
         }
@@ -58,18 +52,18 @@ class TowerActivityLocation : ComponentActivity() {
 @RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TowerLocationScreen(onSearchClick: () -> Unit) {
+fun TowerLocationScreen(onSearchClick: () -> Unit, context: android.content.Context) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Text(
-                        text = "Travel Tips", // 标题文本
+                        text = "Location&Tips", // 标题文本
                         modifier = Modifier
                             .padding(start = 16.dp) // 靠左显示
                             .fillMaxWidth(), // 使文本占据整个宽度
                         textAlign = TextAlign.Start,
-                        fontWeight = FontWeight.Bold// 文本左对齐
+                        fontWeight = FontWeight.Bold // 文本左对齐
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -86,7 +80,11 @@ fun TowerLocationScreen(onSearchClick: () -> Unit) {
                     .fillMaxWidth()
                     .padding(16.dp)
             ) {
-                IconButton(onClick = { /* TODO: Navigate to Restaurant */ }) {
+                IconButton(onClick = {
+                    // 跳转到 FoodActivity
+                    val intent = Intent(context, FoodActivity::class.java)
+                    context.startActivity(intent)
+                }) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_restaurant_btn),
                         contentDescription = null,
@@ -112,7 +110,7 @@ fun TowerLocationScreen(onSearchClick: () -> Unit) {
                         .height(24.dp)
                         .width(1.dp)
                 )
-                IconButton(onClick = onSearchClick) { // 点击时跳转到 TowerActivity
+                IconButton(onClick = onSearchClick) {
                     Icon(
                         painter = painterResource(id = R.drawable.baseline_search_24),
                         contentDescription = null,
@@ -165,7 +163,7 @@ fun TowerLocationScreen(onSearchClick: () -> Unit) {
                         )
                         Spacer(modifier = Modifier.height(8.dp))
                         Text(
-                            text = "Address: G8V2+RW5, Huanghelou E Rd, Wuchang District, Wuhan, Hubei, China, 430060",
+                            text = "Address: G7XQ+R9V, Linjiang Blvd, Hanyang District, Wuhan, Hubei, China, 430060",
                             fontSize = 14.sp
                         )
 
@@ -202,7 +200,6 @@ fun TowerMap() {
     val cameraPositionState = rememberCameraPositionState {
         position = CameraPosition.fromLatLngZoom(yellowCraneTower, 15f)
     }
-
 
     Box(
         modifier = Modifier

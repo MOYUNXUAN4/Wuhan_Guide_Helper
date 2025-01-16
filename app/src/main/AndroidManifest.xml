@@ -72,6 +72,7 @@
             android:name="com.example.wuhan_guide_helper.user.UserSignIn"
             android:exported="true"
             android:theme="@style/Theme.Wuhan_Guide_Helper" />
+
         <activity
             android:name="com.example.wuhan_guide_helper.user.UserRegister"
             android:exported="true"
@@ -84,6 +85,8 @@
             android:exported="true">
         </activity>
 
+        <activity android:name=".ViewPointActivity.University.UniversityActivityLocation" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBag8SGsW4HGLWEWCwoky0_d3CRhfko6wY=" />
@@ -92,6 +95,29 @@
             android:name=".foodActivity.FoodActivity"
             android:exported="true">
         </activity>
+
+        <activity
+            android:name=".ViewPointActivity.University.UniversityActivity"
+            android:exported="true">
+        </activity>
+
+        <activity
+            android:name=".ViewPointActivity.LinBoGate.LinboGateActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ViewPointActivity.LinBoGate.LinboGateLocation"
+            android:exported="true" />
+
+        <activity
+            android:name=".ViewPointActivity.Bridge.BridgeActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".ViewPointActivity.Bridge.BridgeLocation"
+            android:exported="true" />
+
+
 
     </application>
 

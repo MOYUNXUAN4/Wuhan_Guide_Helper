@@ -21,7 +21,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import com.example.wuhan_guide_helper.R
+import com.example.wuhan_guide_helper.foodActivity.FoodActivity
 import com.example.wuhan_guide_helper.ui.theme.Wuhan_Guide_HelperTheme
 import com.google.accompanist.pager.*
 import kotlinx.coroutines.delay
@@ -36,7 +38,8 @@ class TowerActivity : ComponentActivity() {
                         // 跳转到 TowerActivityLocation
                         val intent = Intent(this, TowerActivityLocation::class.java)
                         startActivity(intent)
-                    }
+                    },
+                    context = this // 传递 context
                 )
             }
         }
@@ -45,14 +48,18 @@ class TowerActivity : ComponentActivity() {
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalPagerApi::class)
 @Composable
-fun TowerScreen(onShowOnMapClick: () -> Unit) {
+fun TowerScreen(onShowOnMapClick: () -> Unit, context: android.content.Context) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Text(
                         text = "Yellow Crane Tower Introduction", // 标题文本
-                        modifier = Modifier.padding(start = 16.dp) // 靠左显示
+                        modifier = Modifier
+                            .padding(start = 16.dp) // 靠左显示
+                            .fillMaxWidth(), // 使文本占据整个宽度
+                        textAlign = TextAlign.Start, // 文本左对齐
+                        fontWeight = FontWeight.Bold // 加粗
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -69,7 +76,11 @@ fun TowerScreen(onShowOnMapClick: () -> Unit) {
                     .fillMaxWidth()
                     .padding(16.dp)
             ) {
-                IconButton(onClick = { /* TODO: Navigate to Restaurant */ }) {
+                IconButton(onClick = {
+                    // 跳转到 FoodActivity
+                    val intent = Intent(context, FoodActivity::class.java)
+                    context.startActivity(intent)
+                }) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_restaurant_btn),
                         contentDescription = null,

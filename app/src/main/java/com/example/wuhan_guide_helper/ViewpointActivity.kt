@@ -21,7 +21,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.wuhan_guide_helper.ViewPointActivity.Bridge.BridgeActivity
+import com.example.wuhan_guide_helper.ViewPointActivity.LinBoGate.LinboGateActivity
 import com.example.wuhan_guide_helper.ViewPointActivity.Tower.TowerActivity
+import com.example.wuhan_guide_helper.ViewPointActivity.University.UniversityActivity
 import com.example.wuhan_guide_helper.ui.theme.Wuhan_Guide_HelperTheme
 
 data class ViewPoint(
@@ -72,9 +75,23 @@ fun ViewPointScreen(viewPoints: List<ViewPoint>, context: Context) {
                 ViewPointCard(
                     viewPoint = viewPoint,
                     onClick = {
-                        if (viewPoint.name == "Yellow Crane Tower") {
-                            val intent = Intent(context, TowerActivity::class.java)
-                            context.startActivity(intent)
+                        when (viewPoint.name) {
+                            "Yellow Crane Tower" -> {
+                                val intent = Intent(context, TowerActivity::class.java)
+                                context.startActivity(intent)
+                            }
+                            "Wuhan University" -> {
+                                val intent = Intent(context, UniversityActivity::class.java)
+                                context.startActivity(intent)
+                            }
+                            "Linbo Gate" -> {
+                                val intent = Intent(context, LinboGateActivity::class.java) // 跳转到 LinboGateActivity
+                                context.startActivity(intent)
+                            }
+                            "Wuhan Yangtze River Bridge" -> {
+                                val intent = Intent(context, BridgeActivity::class.java) // 跳转到 BridgeActivity
+                                context.startActivity(intent)
+                            }
                         }
                     }
                 )
@@ -82,7 +99,6 @@ fun ViewPointScreen(viewPoints: List<ViewPoint>, context: Context) {
         }
     }
 }
-
 @Composable
 fun ViewPointCard(viewPoint: ViewPoint, onClick: () -> Unit) {
     Card(
