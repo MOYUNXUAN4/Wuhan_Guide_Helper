@@ -13,12 +13,12 @@ import kotlinx.coroutines.tasks.await
 
 class ReviewViewModel(private val repository: ReviewRepository) : ViewModel() {
 
-    private val db = FirebaseFirestore.getInstance() // 初始化 Firestore
+    private val db = FirebaseFirestore.getInstance()
 
-    // 获取所有评价
+
     val allReviews = repository.allReviews
 
-    // 插入评价
+
     fun insert(location: String, description: String) = viewModelScope.launch {
         val userName = getCurrentUserName() // 获取当前登录用户的用户名
         Log.d("ReviewViewModel", "Inserting review with user name: $userName") // 打印用户名
@@ -26,28 +26,28 @@ class ReviewViewModel(private val repository: ReviewRepository) : ViewModel() {
         repository.insert(review)
     }
 
-    // 更新评价
+
     fun update(review: Review) = viewModelScope.launch {
         repository.update(review)
     }
 
-    // 删除评价
+
     fun delete(review: Review) = viewModelScope.launch {
         repository.delete(review)
     }
 
-    // 根据 id 查询单个评价
+
     fun getReviewById(id: Long) = repository.getReviewById(id)
 
-    // 获取当前登录用户的用户名
+
     private suspend fun getCurrentUserName(): String {
         val currentUser = FirebaseAuth.getInstance().currentUser
         if (currentUser == null) {
             Log.d("ReviewViewModel", "Current user is null. User is not logged in.")
-            return "匿名用户"
+            return "Unknown User"
         }
 
-        // 从 Firestore 获取用户名
+
         return try {
             val document = db.collection("users")
                 .document(currentUser.uid)
@@ -58,7 +58,7 @@ class ReviewViewModel(private val repository: ReviewRepository) : ViewModel() {
             userName
         } catch (e: Exception) {
             Log.e("ReviewViewModel", "Failed to fetch user name from Firestore: ${e.message}")
-            "匿名用户"
+            "Unknown User"
         }
     }
 }

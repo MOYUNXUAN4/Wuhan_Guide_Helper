@@ -22,7 +22,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.res.stringResource
 import com.example.wuhan_guide_helper.R
 import com.example.wuhan_guide_helper.foodActivity.FoodActivity
 import com.example.wuhan_guide_helper.ui.theme.Wuhan_Guide_HelperTheme
@@ -39,7 +38,7 @@ class BridgeActivity : ComponentActivity() {
                         val intent = Intent(this, BridgeLocation::class.java)
                         startActivity(intent)
                     },
-                    context = this // 传递 context
+                    context = this
                 )
             }
         }
@@ -54,19 +53,18 @@ fun TowerScreen(onShowOnMapClick: () -> Unit, context: Context) {
             TopAppBar(
                 title = {
                     Text(
-                        text = "Wuhan Yangtze River Bridge Introduction", // 标题文本
-                        modifier = Modifier.padding(start = 16.dp), // 靠左显示
+                        text = "Wuhan Yangtze River Bridge Introduction",
+                        modifier = Modifier.padding(start = 16.dp),
                         fontWeight = FontWeight.Bold,
-                        color = Color.White// 加粗
+                        color = Color.White
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xFFB497BD) // 背景颜色
+                    containerColor = Color(0xFFB497BD)
                 )
             )
         },
         bottomBar = {
-            // 底部按钮行
             Row(
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically,
@@ -75,14 +73,13 @@ fun TowerScreen(onShowOnMapClick: () -> Unit, context: Context) {
                     .padding(16.dp)
             ) {
                 IconButton(onClick = {
-                    // 跳转到 FoodActivity
                     val intent = Intent(context, FoodActivity::class.java)
                     context.startActivity(intent)
                 }) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_restaurant_btn),
                         contentDescription = null,
-                        tint = Color(0xFFB497BD) // 统一颜色
+                        tint = Color(0xFFB497BD)
                     )
                 }
                 Divider(
@@ -95,7 +92,7 @@ fun TowerScreen(onShowOnMapClick: () -> Unit, context: Context) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_hotel_btn),
                         contentDescription = null,
-                        tint = Color(0xFFB497BD) // 统一颜色
+                        tint = Color(0xFFB497BD)
                     )
                 }
                 Divider(

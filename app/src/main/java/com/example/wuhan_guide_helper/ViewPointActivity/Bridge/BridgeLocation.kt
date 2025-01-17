@@ -140,12 +140,12 @@ fun TowerLocationScreen(onSearchClick: () -> Unit, context: Context) {
                 .padding(padding)
                 .padding(16.dp)
         ) {
-            // 地图
+
             BridgeMap()
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            // 卡片
+
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -201,13 +201,12 @@ fun BridgeMap() {
         position = CameraPosition.fromLatLngZoom(bridge, 15f)
     }
 
-
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .height(240.dp)
             .padding(8.dp)
-            .clip(RoundedCornerShape(16.dp)) // 设置圆角
+            .clip(RoundedCornerShape(16.dp))
     ) {
         GoogleMap(
             modifier = Modifier.fillMaxSize(),

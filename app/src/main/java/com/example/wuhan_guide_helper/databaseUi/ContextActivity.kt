@@ -50,7 +50,7 @@ import com.google.firebase.auth.FirebaseAuth
 
 class ContextActivity : ComponentActivity() {
 
-    // 初始化 ViewModel
+
     private val reviewViewModel: ReviewViewModel by viewModels {
         ReviewViewModelFactory((application as MyApplication).repository)
     }
@@ -81,7 +81,7 @@ fun ReviewApp(reviewViewModel: ReviewViewModel) {
                     )
                 },
                 colors = TopAppBarDefaults.mediumTopAppBarColors(
-                    containerColor = Color(0xFFB497BD), // 十六进制颜色 #B497BD
+                    containerColor = Color(0xFFB497BD),
                     titleContentColor = Color.White
                 )
             )
@@ -141,7 +141,7 @@ fun ReviewListScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White) // 设置背景颜色为白色
+            .background(Color.White)
     ) {
         LazyColumn(
             modifier = Modifier
@@ -155,7 +155,7 @@ fun ReviewListScreen(
                         .fillMaxWidth()
                         .height(180.dp)
                         .clickable { onReviewClick(review) },
-                    colors = CardDefaults.cardColors(containerColor = Color.White), // 卡片背景颜色为白色
+                    colors = CardDefaults.cardColors(containerColor = Color.White),
                     elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
                 ) {
                     Column(
@@ -194,7 +194,7 @@ fun ReviewListScreen(
                 .align(Alignment.BottomCenter)
                 .padding(16.dp)
                 .fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB497BD)) // 按钮颜色改为 #B497BD
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB497BD))
         ) {
             Text(
                 "Add Review",
@@ -218,10 +218,10 @@ fun AddReviewScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
-            .background(Color.White), // 设置背景颜色为白色
+            .background(Color.White),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        // 输入地点
+
         OutlinedTextField(
             value = location,
             onValueChange = { location = it },
@@ -229,7 +229,7 @@ fun AddReviewScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
-        // 输入评价
+
         OutlinedTextField(
             value = description,
             onValueChange = { description = it },
@@ -237,17 +237,13 @@ fun AddReviewScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
-        // 保存按钮
         Button(
             onClick = {
-                // 检查用户是否登录
                 val currentUser = FirebaseAuth.getInstance().currentUser
                 if (currentUser != null) {
-                    // 用户已登录，调用 ViewModel 的 insert 方法
                     reviewViewModel.insert(location, description)
                     onBack()
                 } else {
-                    // 用户未登录，显示提示
                     Toast.makeText(context, "请登录", Toast.LENGTH_SHORT).show()
                 }
             },
@@ -261,7 +257,6 @@ fun AddReviewScreen(
             )
         }
 
-        // 返回按钮
         Button(
             onClick = onBack,
             modifier = Modifier.fillMaxWidth(),
@@ -290,7 +285,7 @@ fun ReviewDetailScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
-            .background(Color.White), // 设置背景颜色为白色
+            .background(Color.White),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
@@ -308,7 +303,6 @@ fun ReviewDetailScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
-        // 描述输入框
         OutlinedTextField(
             value = updatedDescription,
             onValueChange = { updatedDescription = it },
@@ -316,7 +310,6 @@ fun ReviewDetailScreen(
             modifier = Modifier.fillMaxWidth()
         )
 
-        // 用户名显示（不可编辑）
         Text(
             text = "Name: ${review.name}",
             style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
@@ -324,7 +317,6 @@ fun ReviewDetailScreen(
             textAlign = TextAlign.Left
         )
 
-        // 修改按钮
         Button(
             onClick = {
                 val updatedReview = review.copy(
@@ -343,7 +335,6 @@ fun ReviewDetailScreen(
             )
         }
 
-        // 删除按钮
         Button(
             onClick = onDelete,
             modifier = Modifier.fillMaxWidth(),
@@ -356,7 +347,6 @@ fun ReviewDetailScreen(
             )
         }
 
-        // 返回按钮
         Button(
             onClick = onBack,
             modifier = Modifier.fillMaxWidth(),

@@ -49,7 +49,6 @@ fun TransferScreen(exchangeRateService: ExchangeRateService) {
     var lastUpdated by remember { mutableStateOf("") }
     var isInputValid by remember { mutableStateOf(true) }
 
-    // Fetch exchange rate from the network
     LaunchedEffect(Unit) {
         isLoading = true
         errorMessage = null
@@ -70,24 +69,21 @@ fun TransferScreen(exchangeRateService: ExchangeRateService) {
         }
     }
 
-    // Custom theme color
-    val customPrimaryColor = Color(0xFFB497BD) // Hex: #B497BD
-
-    // Main layout with TopBar
+    val customPrimaryColor = Color(0xFFB497BD)
     Scaffold(
         topBar = {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(80.dp) // 设置 TopBar 高度
-                    .background(customPrimaryColor), // 设置背景色
-                contentAlignment = Alignment.CenterStart // 文字居左
+                    .height(80.dp)
+                    .background(customPrimaryColor),
+                contentAlignment = Alignment.CenterStart
             ) {
                 Text(
                     text = "Currency Converter",
-                    color = Color.White, // 文字颜色
-                    style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold), // 加大字体并加粗
-                    modifier = Modifier.padding(start = 16.dp) // 左边距
+                    color = Color.White,
+                    style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold),
+                    modifier = Modifier.padding(start = 16.dp)
                 )
             }
         },
@@ -107,7 +103,6 @@ fun TransferScreen(exchangeRateService: ExchangeRateService) {
                     verticalArrangement = Arrangement.spacedBy(24.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    // Input/Output Card
                     Card(
                         modifier = Modifier.fillMaxWidth(),
                         colors = CardDefaults.cardColors(
@@ -131,7 +126,7 @@ fun TransferScreen(exchangeRateService: ExchangeRateService) {
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(60.dp)
-                                    .clickable { rmbAmount = "" }, // 点击时清空内容
+                                    .clickable { rmbAmount = "" },
                                 colors = TextFieldDefaults.colors(
                                     focusedContainerColor = MaterialTheme.colorScheme.surface,
                                     unfocusedContainerColor = MaterialTheme.colorScheme.surface,
@@ -150,7 +145,6 @@ fun TransferScreen(exchangeRateService: ExchangeRateService) {
                                 )
                             }
 
-                            // MYR Output
                             TextField(
                                 value = myrAmount,
                                 onValueChange = { },
@@ -169,7 +163,6 @@ fun TransferScreen(exchangeRateService: ExchangeRateService) {
                         }
                     }
 
-                    // Convert Button
                     ElevatedButton(
                         onClick = {
                             val rmb = rmbAmount.toDoubleOrNull() ?: 0.0
@@ -196,7 +189,6 @@ fun TransferScreen(exchangeRateService: ExchangeRateService) {
                         }
                     }
 
-                    // Last Updated Time
                     if (lastUpdated.isNotEmpty()) {
                         Column(
                             horizontalAlignment = Alignment.CenterHorizontally,
@@ -215,7 +207,6 @@ fun TransferScreen(exchangeRateService: ExchangeRateService) {
                         }
                     }
 
-                    // Error Message
                     if (errorMessage != null) {
                         AssistChip(
                             onClick = { errorMessage = null },
