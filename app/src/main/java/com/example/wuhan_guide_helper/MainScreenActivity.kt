@@ -175,7 +175,7 @@ fun TopBar(username: String) {
         horizontalArrangement = Arrangement.End
     ) {
         Text(
-            text = username, // 显示用户名
+            text = username,
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.padding(end = 8.dp)
         )
@@ -185,13 +185,11 @@ fun TopBar(username: String) {
                 try {
                     val user = auth.currentUser
                     if (user != null) {
-                        // 用户已登录，跳转到 UserDetail 界面
                         val intent = Intent(context, UserDetailActivity::class.java)
-                        intent.putExtra("email", user.email) // 传递邮箱
-                        intent.putExtra("username", username) // 传递用户名
+                        intent.putExtra("email", user.email)
+                        intent.putExtra("username", username)
                         context.startActivity(intent)
                     } else {
-                        // 用户未登录，跳转到登录界面
                         val intent = Intent(context, UserSignIn::class.java)
                         context.startActivity(intent)
                     }

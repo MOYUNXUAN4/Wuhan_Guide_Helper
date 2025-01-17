@@ -21,7 +21,6 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import com.example.wuhan_guide_helper.R
 import com.example.wuhan_guide_helper.ui.theme.Wuhan_Guide_HelperTheme
 import com.google.firebase.auth.FirebaseAuth
@@ -33,7 +32,7 @@ import kotlinx.coroutines.launch
 
 class UserRegister : ComponentActivity() {
     private lateinit var auth: FirebaseAuth
-    private val db = FirebaseFirestore.getInstance() // 初始化 Firestore
+    private val db = FirebaseFirestore.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,29 +40,29 @@ class UserRegister : ComponentActivity() {
         setContent {
             Wuhan_Guide_HelperTheme {
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    var isLoading by remember { mutableStateOf(false) } // 加载状态
-                    var showSuccessDialog by remember { mutableStateOf(false) } // 注册成功弹窗状态
-                    val snackbarHostState = remember { SnackbarHostState() } // Snackbar 状态
-                    val coroutineScope = rememberCoroutineScope() // CoroutineScope
+                    var isLoading by remember { mutableStateOf(false) }
+                    var showSuccessDialog by remember { mutableStateOf(false) }
+                    val snackbarHostState = remember { SnackbarHostState() }
+                    val coroutineScope = rememberCoroutineScope()
 
                     UserRegisterScreen(
                         isLoading = isLoading,
                         snackbarHostState = snackbarHostState,
                         showSuccessDialog = showSuccessDialog,
                         onRegisterClick = { email, password, username ->
-                            isLoading = true // 开始加载
+                            isLoading = true
                             registerUser(email, password, username, onError = { errorMessage ->
-                                isLoading = false // 停止加载
+                                isLoading = false
                                 coroutineScope.launch {
-                                    snackbarHostState.showSnackbar(errorMessage) // 显示错误提示
+                                    snackbarHostState.showSnackbar(errorMessage)
                                 }
                             }, onSuccess = {
-                                isLoading = false // 停止加载
-                                showSuccessDialog = true // 显示注册成功弹窗
+                                isLoading = false
+                                showSuccessDialog = true
                             })
                         },
                         onDismissSuccessDialog = {
-                            showSuccessDialog = false // 关闭注册成功弹窗
+                            showSuccessDialog = false
                             val intent = Intent(this, UserSignIn::class.java)
                             startActivity(intent)
                             finish()
@@ -84,7 +83,6 @@ class UserRegister : ComponentActivity() {
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    // 注册成功
                     val user = auth.currentUser
                     val userId = user?.uid ?: ""
                     val userData = hashMapOf(
@@ -93,21 +91,18 @@ class UserRegister : ComponentActivity() {
                         "createdAt" to System.currentTimeMillis()
                     )
 
-                    // 将用户信息存储到 Firestore
                     db.collection("users")
                         .document(userId)
                         .set(userData)
                         .addOnSuccessListener {
                             println("User data saved!")
-                            // 设置 Firebase 用户的 displayName
                             val profileUpdates = UserProfileChangeRequest.Builder()
-                                .setDisplayName(username) // 设置用户名
+                                .setDisplayName(username)
                                 .build()
 
                             user?.updateProfile(profileUpdates)?.addOnCompleteListener { updateTask ->
                                 if (updateTask.isSuccessful) {
                                     println("Display name updated!")
-                                    // 重新加载用户信息以确保 displayName 生效
                                     user.reload().addOnCompleteListener { reloadTask ->
                                         if (reloadTask.isSuccessful) {
                                             println("User reloaded!")
@@ -128,7 +123,6 @@ class UserRegister : ComponentActivity() {
                             onError("Failed to save user data: ${e.message}")
                         }
                 } else {
-                    // 注册失败
                     val error = task.exception
                     val errorMessage = when {
                         error?.message?.contains("The email address is badly formatted") == true -> "Invalid email format."
