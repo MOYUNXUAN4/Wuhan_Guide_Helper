@@ -70,6 +70,7 @@ dependencies {
     implementation ("io.coil-kt:coil-compose:2.4.0")
     // Google Play Services Maps
     implementation("com.google.android.gms:play-services-maps:18.2.0")
+    implementation ("androidx.core:core-ktx:1.10.1")
 
 
     // Firebase BOM
@@ -91,10 +92,9 @@ dependencies {
 
     // Room
     implementation("androidx.room:room-runtime:${rootProject.extra["room_version"]}")
-    kapt("androidx.room:room-compiler:${rootProject.extra["room_version"]}") // 使用 kapt
+    kapt("androidx.room:room-compiler:${rootProject.extra["room_version"]}")
     implementation("androidx.room:room-ktx:${rootProject.extra["room_version"]}")
 
-    // 测试依赖
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

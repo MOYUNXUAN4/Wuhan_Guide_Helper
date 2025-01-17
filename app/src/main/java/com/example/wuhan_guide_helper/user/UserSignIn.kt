@@ -12,12 +12,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.wuhan_guide_helper.R
 import com.example.wuhan_guide_helper.MainActivity
 import com.example.wuhan_guide_helper.ui.theme.Wuhan_Guide_HelperTheme
@@ -35,25 +38,25 @@ class UserSignIn : ComponentActivity() {
         setContent {
             Wuhan_Guide_HelperTheme {
                 Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
-                    var isLoading by remember { mutableStateOf(false) } // 加载状态
-                    var showSuccessDialog by remember { mutableStateOf(false) } // 登录成功弹窗状态
-                    val snackbarHostState = remember { SnackbarHostState() } // Snackbar 状态
-                    val coroutineScope = rememberCoroutineScope() // CoroutineScope
+                    var isLoading by remember { mutableStateOf(false) }
+                    var showSuccessDialog by remember { mutableStateOf(false) }
+                    val snackbarHostState = remember { SnackbarHostState() }
+                    val coroutineScope = rememberCoroutineScope()
 
                     UserSignInScreen(
                         isLoading = isLoading,
                         snackbarHostState = snackbarHostState,
                         showSuccessDialog = showSuccessDialog,
                         onLoginClick = { email, password ->
-                            isLoading = true // 开始加载
+                            isLoading = true
                             loginUser(email, password, onError = { errorMessage ->
-                                isLoading = false // 停止加载
+                                isLoading = false
                                 coroutineScope.launch {
-                                    snackbarHostState.showSnackbar(errorMessage) // 显示错误提示
+                                    snackbarHostState.showSnackbar(errorMessage)
                                 }
                             }, onSuccess = {
-                                isLoading = false // 停止加载
-                                showSuccessDialog = true // 显示登录成功弹窗
+                                isLoading = false
+                                showSuccessDialog = true
                             })
                         },
                         onRegisterClick = {
@@ -61,7 +64,7 @@ class UserSignIn : ComponentActivity() {
                             startActivity(intent)
                         },
                         onDismissSuccessDialog = {
-                            showSuccessDialog = false // 关闭登录成功弹窗
+                            showSuccessDialog = false
                             val intent = Intent(this, MainActivity::class.java)
                             startActivity(intent)
                             finish()
@@ -81,11 +84,9 @@ class UserSignIn : ComponentActivity() {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
-                    // 登录成功
                     println("Login successful!")
                     onSuccess()
                 } else {
-                    // 登录失败
                     val error = task.exception
                     val errorMessage = when {
                         error?.message?.contains("password is invalid") == true -> "Invalid password."
@@ -111,6 +112,9 @@ fun UserSignInScreen(
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var isPasswordVisible by remember { mutableStateOf(false) }
+    val tianOneFontFamily = FontFamily(
+        Font(R.font.sigmaroneregular)
+    )
 
     Column(
         modifier = Modifier
@@ -119,18 +123,21 @@ fun UserSignInScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // 添加标题 "Wuhan Travel Guide Log In"
         Text(
-            text = "Wuhan Travel Guide\nLog In", // 使用换行符 \n 分隔
-            style = MaterialTheme.typography.displayMedium.copy(
+            text = "Wuhan Travel Guide\nLog In",
+            style = MaterialTheme.typography.displaySmall.copy(
                 fontWeight = FontWeight.Bold,
-                color = Color.Black // 黑色
+                color = Color.Black,
+                fontFamily = tianOneFontFamily,
+                fontSize = 60.sp,
+                lineHeight = 60.sp
             ),
-            textAlign = TextAlign.Center, // 文字居中
-            modifier = Modifier.padding(bottom = 32.dp)
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 24.dp)
         )
 
-        // 邮箱输入框
         OutlinedTextField(
             value = email,
             onValueChange = { email = it },
@@ -141,7 +148,6 @@ fun UserSignInScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // 密码输入框
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
@@ -163,13 +169,12 @@ fun UserSignInScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // 登录按钮
         Button(
             onClick = { onLoginClick(email, password) },
             modifier = Modifier.fillMaxWidth(),
             enabled = !isLoading,
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFFB497BD) // 设置按钮背景颜色为 #B497BD
+                containerColor = Color(0xFFB497BD)
             )
         ) {
             if (isLoading) {
@@ -181,25 +186,22 @@ fun UserSignInScreen(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        // 注册按钮
         Button(
             onClick = onRegisterClick,
             modifier = Modifier.fillMaxWidth(),
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFFB497BD) // 设置按钮背景颜色为 #B497BD
+                containerColor = Color(0xFFB497BD)
             )
         ) {
             Text("Register")
         }
 
-        // SnackbarHost
         SnackbarHost(
             hostState = snackbarHostState,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
     }
 
-    // 登录成功弹窗
     if (showSuccessDialog) {
         AlertDialog(
             onDismissRequest = onDismissSuccessDialog,

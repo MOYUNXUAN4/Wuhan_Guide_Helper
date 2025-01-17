@@ -12,11 +12,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.wuhan_guide_helper.R
 import com.example.wuhan_guide_helper.ui.theme.Wuhan_Guide_HelperTheme
@@ -158,6 +162,9 @@ fun UserRegisterScreen(
 
     // 引入 coroutineScope
     val coroutineScope = rememberCoroutineScope()
+    val tianOneFontFamily = FontFamily(
+        Font(R.font.sigmaroneregular) // 确保资源 ID 正确
+    )
 
     Column(
         modifier = Modifier
@@ -169,11 +176,17 @@ fun UserRegisterScreen(
         // 添加艺术字体标题 "Join Us Now!"
         Text(
             text = "Join Us Now!",
-            style = MaterialTheme.typography.displayMedium.copy(
+            style = MaterialTheme.typography.displaySmall.copy(
                 fontWeight = FontWeight.Bold,
-                color = Color(0xFFB497BD) // 使用十六进制颜色值
+                color = Color.Black,
+                fontFamily = tianOneFontFamily,
+                fontSize = 80.sp,
+                lineHeight = 80.sp // 设置行高为 100sp，增加两行之间的间距
             ),
-            modifier = Modifier.padding(bottom = 32.dp)
+            textAlign = TextAlign.Center, // 设置文本居中对齐
+            modifier = Modifier
+                .fillMaxWidth() // 让 Text 组件占据整个宽度
+                .padding(bottom = 24.dp)
         )
 
         // 用户名输入框
