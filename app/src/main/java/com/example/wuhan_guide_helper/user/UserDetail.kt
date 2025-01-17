@@ -11,7 +11,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.wuhan_guide_helper.MainScreenActivity
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
@@ -80,10 +79,13 @@ fun UserDetail(email: String, username: String) {
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFFB497BD) // 设置按钮背景颜色为 #B497BD
+                containerColor = Color(0xFFFF0000) // 按钮背景颜色改为红色 (#FF0000)
             )
         ) {
-            Text("Logout")
+            Text(
+                text = "Logout",
+                color = Color.White // 文字颜色保持白色
+            )
         }
     }
 }

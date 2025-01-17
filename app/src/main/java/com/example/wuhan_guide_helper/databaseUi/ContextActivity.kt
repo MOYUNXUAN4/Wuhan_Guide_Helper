@@ -12,11 +12,11 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.animation.with
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -37,14 +37,15 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.example.wuhan_guide_helper.MyApplication
 import com.example.wuhan_guide_helper.database.Review
-import com.example.wuhan_guide_helper.database.ReviewRepository
-import com.example.wuhan_guide_helper.databaseUi.ReviewViewModel
-import com.example.wuhan_guide_helper.databaseUi.ReviewViewModelFactory
+
 import com.google.firebase.auth.FirebaseAuth
 
 class ContextActivity : ComponentActivity() {
@@ -72,10 +73,16 @@ fun ReviewApp(reviewViewModel: ReviewViewModel) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Review Manager", style = MaterialTheme.typography.headlineLarge) },
+                title = {
+                    Text(
+                        "Review Manager",
+                        style = MaterialTheme.typography.headlineLarge.copy(fontWeight = FontWeight.Bold),
+                        textAlign = TextAlign.Left
+                    )
+                },
                 colors = TopAppBarDefaults.mediumTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer
+                    containerColor = Color(0xFFB497BD), // 十六进制颜色 #B497BD
+                    titleContentColor = Color.White
                 )
             )
         },
@@ -131,7 +138,11 @@ fun ReviewListScreen(
 ) {
     val allReviews by reviewViewModel.allReviews.collectAsState(initial = emptyList())
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White) // 设置背景颜色为白色
+    ) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -144,7 +155,7 @@ fun ReviewListScreen(
                         .fillMaxWidth()
                         .height(180.dp)
                         .clickable { onReviewClick(review) },
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+                    colors = CardDefaults.cardColors(containerColor = Color.White), // 卡片背景颜色为白色
                     elevation = CardDefaults.cardElevation(defaultElevation = 8.dp)
                 ) {
                     Column(
@@ -155,19 +166,22 @@ fun ReviewListScreen(
                     ) {
                         Text(
                             text = "Location: ${review.location}",
-                            style = MaterialTheme.typography.headlineSmall,
+                            style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold),
                             maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
+                            overflow = TextOverflow.Ellipsis,
+                            textAlign = TextAlign.Left
                         )
                         Text(
                             text = "Description: ${review.description}",
-                            style = MaterialTheme.typography.titleLarge,
+                            style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
                             maxLines = 2,
-                            overflow = TextOverflow.Ellipsis
+                            overflow = TextOverflow.Ellipsis,
+                            textAlign = TextAlign.Left
                         )
                         Text(
                             text = "Name: ${review.name}",
-                            style = MaterialTheme.typography.bodyLarge
+                            style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
+                            textAlign = TextAlign.Left
                         )
                     }
                 }
@@ -180,9 +194,13 @@ fun ReviewListScreen(
                 .align(Alignment.BottomCenter)
                 .padding(16.dp)
                 .fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB497BD)) // 按钮颜色改为 #B497BD
         ) {
-            Text("Add Review", style = MaterialTheme.typography.titleLarge)
+            Text(
+                "Add Review",
+                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                color = Color.White
+            )
         }
     }
 }
@@ -199,14 +217,15 @@ fun AddReviewScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(16.dp)
+            .background(Color.White), // 设置背景颜色为白色
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         // 输入地点
         OutlinedTextField(
             value = location,
             onValueChange = { location = it },
-            label = { Text("Location") },
+            label = { Text("Location", fontWeight = FontWeight.Bold) },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -214,7 +233,7 @@ fun AddReviewScreen(
         OutlinedTextField(
             value = description,
             onValueChange = { description = it },
-            label = { Text("Description") },
+            label = { Text("Description", fontWeight = FontWeight.Bold) },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -233,18 +252,26 @@ fun AddReviewScreen(
                 }
             },
             modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB497BD)) // 按钮颜色改为 #B497BD
         ) {
-            Text("Save Review")
+            Text(
+                "Save Review",
+                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                color = Color.White
+            )
         }
 
         // 返回按钮
         Button(
             onClick = onBack,
             modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB497BD)) // 按钮颜色改为 #B497BD
         ) {
-            Text("Back")
+            Text(
+                "Back",
+                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                color = Color.White
+            )
         }
     }
 }
@@ -262,20 +289,22 @@ fun ReviewDetailScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(16.dp)
+            .background(Color.White), // 设置背景颜色为白色
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text(
             text = "Review Details",
-            style = MaterialTheme.typography.headlineMedium,
-            modifier = Modifier.fillMaxWidth()
+            style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Left
         )
 
         // 地点输入框
         OutlinedTextField(
             value = updatedLocation,
             onValueChange = { updatedLocation = it },
-            label = { Text("Location") },
+            label = { Text("Location", fontWeight = FontWeight.Bold) },
             modifier = Modifier.fillMaxWidth()
         )
 
@@ -283,15 +312,16 @@ fun ReviewDetailScreen(
         OutlinedTextField(
             value = updatedDescription,
             onValueChange = { updatedDescription = it },
-            label = { Text("Description") },
+            label = { Text("Description", fontWeight = FontWeight.Bold) },
             modifier = Modifier.fillMaxWidth()
         )
 
         // 用户名显示（不可编辑）
         Text(
             text = "Name: ${review.name}",
-            style = MaterialTheme.typography.bodyLarge,
-            modifier = Modifier.fillMaxWidth()
+            style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Left
         )
 
         // 修改按钮
@@ -304,27 +334,39 @@ fun ReviewDetailScreen(
                 onChange(updatedReview)
             },
             modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB497BD)) // 按钮颜色改为 #B497BD
         ) {
-            Text("Change")
+            Text(
+                "Change",
+                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                color = Color.White
+            )
         }
 
         // 删除按钮
         Button(
             onClick = onDelete,
             modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF0000)) // 删除按钮颜色改为红色
         ) {
-            Text("Delete")
+            Text(
+                "Delete",
+                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                color = Color.White
+            )
         }
 
         // 返回按钮
         Button(
             onClick = onBack,
             modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondary)
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFB497BD)) // 按钮颜色改为 #B497BD
         ) {
-            Text("Back")
+            Text(
+                "Back",
+                style = MaterialTheme.typography.titleLarge.copy(fontWeight = FontWeight.Bold),
+                color = Color.White
+            )
         }
     }
 }

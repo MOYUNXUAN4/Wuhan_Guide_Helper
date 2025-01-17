@@ -56,7 +56,8 @@ fun TowerScreen(onShowOnMapClick: () -> Unit, context: Context) {
                     Text(
                         text = "Wuhan Yangtze River Bridge Introduction", // 标题文本
                         modifier = Modifier.padding(start = 16.dp), // 靠左显示
-                        fontWeight = FontWeight.Bold // 加粗
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White// 加粗
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(

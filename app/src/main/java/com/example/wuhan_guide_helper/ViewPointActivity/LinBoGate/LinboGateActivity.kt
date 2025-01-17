@@ -54,21 +54,21 @@ fun TowerScreen(onShowOnMapClick: () -> Unit, context: android.content.Context) 
             TopAppBar(
                 title = {
                     Text(
-                        text = "LinBo Gate Introduction", // 标题文本
+                        text = "LinBo Gate Introduction",
                         modifier = Modifier
-                            .padding(start = 16.dp) // 靠左显示
-                            .fillMaxWidth(), // 使文本占据整个宽度
-                        textAlign = TextAlign.Start, // 文本左对齐
-                        fontWeight = FontWeight.Bold // 加粗
+                            .padding(start = 16.dp)
+                            .fillMaxWidth(),
+                        textAlign = TextAlign.Start,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xFFB497BD) // 背景颜色
+                    containerColor = Color(0xFFB497BD)
                 )
             )
         },
         bottomBar = {
-            // 底部按钮行
             Row(
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically,
@@ -77,14 +77,13 @@ fun TowerScreen(onShowOnMapClick: () -> Unit, context: android.content.Context) 
                     .padding(16.dp)
             ) {
                 IconButton(onClick = {
-                    // 跳转到 FoodActivity
                     val intent = Intent(context, FoodActivity::class.java)
                     context.startActivity(intent)
                 }) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_restaurant_btn),
                         contentDescription = null,
-                        tint = Color(0xFFB497BD) // 统一颜色
+                        tint = Color(0xFFB497BD)
                     )
                 }
                 Divider(
@@ -97,7 +96,7 @@ fun TowerScreen(onShowOnMapClick: () -> Unit, context: android.content.Context) 
                     Icon(
                         painter = painterResource(id = R.drawable.ic_hotel_btn),
                         contentDescription = null,
-                        tint = Color(0xFFB497BD) // 统一颜色
+                        tint = Color(0xFFB497BD)
                     )
                 }
                 Divider(
@@ -110,7 +109,7 @@ fun TowerScreen(onShowOnMapClick: () -> Unit, context: android.content.Context) 
                     Icon(
                         painter = painterResource(id = R.drawable.baseline_search_24),
                         contentDescription = null,
-                        tint = Color(0xFFB497BD) // 统一颜色
+                        tint = Color(0xFFB497BD)
                     )
                 }
                 Divider(
@@ -123,7 +122,7 @@ fun TowerScreen(onShowOnMapClick: () -> Unit, context: android.content.Context) 
                     Icon(
                         painter = painterResource(id = R.drawable.show_on_map),
                         contentDescription = null,
-                        tint = Color(0xFFB497BD) // 统一颜色
+                        tint = Color(0xFFB497BD)
                     )
                 }
             }

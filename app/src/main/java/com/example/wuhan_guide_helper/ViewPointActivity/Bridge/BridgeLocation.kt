@@ -58,16 +58,17 @@ fun TowerLocationScreen(onSearchClick: () -> Unit, context: Context) {
             TopAppBar(
                 title = {
                     Text(
-                        text = "Location&Tips", // 标题文本
+                        text = "Location&Tips",
                         modifier = Modifier
-                            .padding(start = 16.dp) // 靠左显示
-                            .fillMaxWidth(), // 使文本占据整个宽度
+                            .padding(start = 16.dp)
+                            .fillMaxWidth(),
                         textAlign = TextAlign.Start,
-                        fontWeight = FontWeight.Bold // 文本左对齐
+                        fontWeight = FontWeight.Bold ,
+                        color = Color.White
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xFFB497BD) // 背景颜色
+                    containerColor = Color(0xFFB497BD)
                 )
             )
         },

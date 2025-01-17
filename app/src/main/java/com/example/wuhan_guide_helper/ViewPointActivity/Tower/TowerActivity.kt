@@ -35,11 +35,10 @@ class TowerActivity : ComponentActivity() {
             Wuhan_Guide_HelperTheme {
                 TowerScreen(
                     onShowOnMapClick = {
-                        // 跳转到 TowerActivityLocation
                         val intent = Intent(this, TowerActivityLocation::class.java)
                         startActivity(intent)
                     },
-                    context = this // 传递 context
+                    context = this
                 )
             }
         }
@@ -54,16 +53,17 @@ fun TowerScreen(onShowOnMapClick: () -> Unit, context: android.content.Context) 
             TopAppBar(
                 title = {
                     Text(
-                        text = "Yellow Crane Tower Introduction", // 标题文本
+                        text = "Yellow Crane Tower Introduction",
                         modifier = Modifier
-                            .padding(start = 16.dp) // 靠左显示
-                            .fillMaxWidth(), // 使文本占据整个宽度
-                        textAlign = TextAlign.Start, // 文本左对齐
-                        fontWeight = FontWeight.Bold // 加粗
+                            .padding(start = 16.dp)
+                            .fillMaxWidth(),
+                        textAlign = TextAlign.Start,
+                        fontWeight = FontWeight.Bold,
+                        color = Color.White
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xFFB497BD) // 背景颜色
+                    containerColor = Color(0xFFB497BD)
                 )
             )
         },
