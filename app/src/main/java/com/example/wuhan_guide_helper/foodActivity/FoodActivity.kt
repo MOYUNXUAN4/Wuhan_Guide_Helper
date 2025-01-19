@@ -1,11 +1,15 @@
 package com.example.wuhan_guide_helper.foodActivity
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -25,61 +29,102 @@ class FoodActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            FoodInWuhanScreen()
+            FoodInWuhanScreen(context = this)
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FoodInWuhanScreen() {
+fun FoodInWuhanScreen(context: Context) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {
                     Text(
                         text = "Food In Wuhan",
-                        color = Color.White, // 标题文字颜色为白色
+                        color = Color.White,
                         fontSize = 20.sp,
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Start // 标题左对齐
+                        textAlign = TextAlign.Start
                     )
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xFFB497BD) // TopAppBar 背景颜色保留为 #B497BD
+                    containerColor = Color(0xFFB497BD)
                 )
             )
         },
-        containerColor = Color.White // Scaffold 背景颜色改为白色
+        containerColor = Color.White
     ) { innerPadding ->
-        Column(
+        LazyColumn(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
                 .padding(16.dp)
-                .background(Color.White) // Column 背景颜色改为白色
+                .background(Color.White)
         ) {
-            FoodCard(
-                imageRes = R.drawable.hot_dry_noodles, // 替换为你的图片资源 ID
-                title = "Wuhan Hot Dry Noodles",
-                description = stringResource(R.string.HotDryNoodles)
-            )
-            Spacer(modifier = Modifier.height(16.dp))
+            item {
+                FoodCard(
+                    imageRes = R.drawable.hot_dry_noodles,
+                    title = "Wuhan Hot Dry Noodles",
+                    description = stringResource(R.string.HotDryNoodles),
+                    onClick = {
+                        val intent = Intent(context, FoodLocation::class.java)
+                        intent.putExtra("foodName", "Wuhan Hot Dry Noodles")
+                        context.startActivity(intent)
+                    }
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+
+            item {
+                FoodCard(
+                    imageRes = R.drawable.doupi,
+                    title = "Doupi",
+                    description = stringResource(R.string.doupi),
+                    onClick = {
+                        val intent = Intent(context, FoodLocation::class.java)
+                        intent.putExtra("foodName", "Doupi")
+                        context.startActivity(intent)
+                    }
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+            }
+
+            item {
+                FoodCard(
+                    imageRes = R.drawable.mianwo,
+                    title = "Mianwo",
+                    description = stringResource(R.string.mianwoIntroduction),
+                    onClick = {
+                        val intent = Intent(context, FoodLocation::class.java)
+                        intent.putExtra("foodName", "Mianwo")
+                        context.startActivity(intent)
+                    }
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+            }
         }
     }
 }
 
 @Composable
-fun FoodCard(imageRes: Int, title: String, description: String) {
+fun FoodCard(
+    imageRes: Int,
+    title: String,
+    description: String,
+    onClick: () -> Unit
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
-        shape = RoundedCornerShape(12.dp), // Card 圆角
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp), // 添加阴影以营造悬浮感
+            .padding(vertical = 8.dp)
+            .clickable { onClick() },
+        shape = RoundedCornerShape(12.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         colors = CardDefaults.cardColors(
-            containerColor = Color.White // Card 背景颜色改为白色
+            containerColor = Color.White
         )
     ) {
         Column(
@@ -92,21 +137,21 @@ fun FoodCard(imageRes: Int, title: String, description: String) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(200.dp)
-                    .clip(RoundedCornerShape(8.dp)) // 图片圆角
+                    .clip(RoundedCornerShape(8.dp))
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
                 text = title,
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.Black, // 标题文字颜色改为黑色
+                color = Color.Black,
                 modifier = Modifier.padding(bottom = 4.dp)
             )
             Text(
                 text = description,
                 fontSize = 14.sp,
                 lineHeight = 20.sp,
-                color = Color.Black // 描述文字颜色改为黑色
+                color = Color.Black
             )
         }
     }
