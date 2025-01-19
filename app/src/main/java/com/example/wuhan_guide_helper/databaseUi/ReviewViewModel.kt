@@ -52,8 +52,8 @@ class ReviewViewModel(private val repository: ReviewRepository) : ViewModel() {
             val document = db.collection("users")
                 .document(currentUser.uid)
                 .get()
-                .await() // 使用 await() 将异步操作转换为同步
-            val userName = document.getString("username") ?: "匿名用户"
+                .await()
+            val userName = document.getString("username") ?: "Unknown User"
             Log.d("ReviewViewModel", "Fetched user name from Firestore: $userName")
             userName
         } catch (e: Exception) {

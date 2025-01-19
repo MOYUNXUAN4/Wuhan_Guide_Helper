@@ -147,17 +147,15 @@ fun UserRegisterScreen(
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var confirmPassword by remember { mutableStateOf("") } // 第二次密码输入框
-    var username by remember { mutableStateOf("") } // 用户名输入框
+    var confirmPassword by remember { mutableStateOf("") }
+    var username by remember { mutableStateOf("") }
 
-    // 控制密码是否可见的状态
     var isPasswordVisible by remember { mutableStateOf(false) }
     var isConfirmPasswordVisible by remember { mutableStateOf(false) }
 
-    // 引入 coroutineScope
     val coroutineScope = rememberCoroutineScope()
     val tianOneFontFamily = FontFamily(
-        Font(R.font.sigmaroneregular) // 确保资源 ID 正确
+        Font(R.font.sigmaroneregular)
     )
 
     Column(
@@ -167,7 +165,6 @@ fun UserRegisterScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // 添加艺术字体标题 "Join Us Now!"
         Text(
             text = "Join Us Now!",
             style = MaterialTheme.typography.displaySmall.copy(
@@ -175,11 +172,11 @@ fun UserRegisterScreen(
                 color = Color.Black,
                 fontFamily = tianOneFontFamily,
                 fontSize = 80.sp,
-                lineHeight = 80.sp // 设置行高为 100sp，增加两行之间的间距
+                lineHeight = 80.sp
             ),
-            textAlign = TextAlign.Center, // 设置文本居中对齐
+            textAlign = TextAlign.Center,
             modifier = Modifier
-                .fillMaxWidth() // 让 Text 组件占据整个宽度
+                .fillMaxWidth()
                 .padding(bottom = 24.dp)
         )
 
@@ -204,7 +201,6 @@ fun UserRegisterScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // 密码输入框
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
@@ -226,7 +222,6 @@ fun UserRegisterScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // 确认密码输入框
         OutlinedTextField(
             value = confirmPassword,
             onValueChange = { confirmPassword = it },
@@ -248,10 +243,9 @@ fun UserRegisterScreen(
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        // 注册按钮
+
         Button(
             onClick = {
-                // 检查所有输入框是否都已填写
                 if (username.isBlank() || email.isBlank() || password.isBlank() || confirmPassword.isBlank()) {
                     coroutineScope.launch {
                         snackbarHostState.showSnackbar("Please fill in all fields.")
@@ -267,7 +261,7 @@ fun UserRegisterScreen(
             modifier = Modifier.fillMaxWidth(),
             enabled = !isLoading,
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFFB497BD) // 设置按钮背景颜色为 #B497BD
+                containerColor = Color(0xFFB497BD)
             )
         ) {
             if (isLoading) {
@@ -277,14 +271,12 @@ fun UserRegisterScreen(
             }
         }
 
-        // SnackbarHost
         SnackbarHost(
             hostState = snackbarHostState,
             modifier = Modifier.align(Alignment.CenterHorizontally)
         )
     }
 
-    // 注册成功弹窗
     if (showSuccessDialog) {
         AlertDialog(
             onDismissRequest = onDismissSuccessDialog,

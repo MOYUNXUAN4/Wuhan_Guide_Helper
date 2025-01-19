@@ -21,8 +21,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.style.TextAlign
 import com.example.wuhan_guide_helper.R
-import com.example.wuhan_guide_helper.ViewPointActivity.Tower.TowerActivity
-import com.example.wuhan_guide_helper.ViewPointActivity.Tower.TowerMap
 import com.example.wuhan_guide_helper.foodActivity.FoodActivity
 import com.example.wuhan_guide_helper.ui.theme.Wuhan_Guide_HelperTheme
 import com.google.android.gms.maps.model.CameraPosition

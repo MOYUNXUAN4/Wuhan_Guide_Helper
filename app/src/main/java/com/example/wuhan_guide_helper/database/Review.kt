@@ -4,18 +4,17 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.firebase.auth.FirebaseAuth
 
-@Entity(tableName = "reviews") // 定义表名为 "reviews"
+@Entity(tableName = "reviews")
 data class Review(
-    @PrimaryKey(autoGenerate = true) val id: Long = 0, // 主键，自动生成
-    val location: String, // 地点
-    val description: String, // 描述
-    val name: String // 用户名，默认从 Firebase 获取
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
+    val location: String,
+    val description: String,
+    val name: String
 ) {
     companion object {
-        // 获取当前登录用户的用户名
         private fun getCurrentUserName(): String {
             val currentUser = FirebaseAuth.getInstance().currentUser
-            return currentUser?.displayName ?: "Unknown User" // 如果用户未设置用户名，显示默认值
+            return currentUser?.displayName ?: "Unknown User"
         }
     }
 }
