@@ -26,6 +26,8 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import com.example.wuhan_guide_helper.R
 
 class HotelListActivity : ComponentActivity() {
@@ -125,11 +127,25 @@ fun HotelCard(hotelName: String, imageRes: Int, onClick: () -> Unit) {
                 .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Image(painter = painterResource(id = imageRes), contentDescription = hotelName)
+            Image(
+                painter = painterResource(id = imageRes),
+                contentDescription = hotelName,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp)
+                    .clip(RoundedCornerShape(16.dp)),
+                contentScale = ContentScale.Crop
+            )
             Spacer(modifier = Modifier.height(8.dp))
             Text(text = hotelName, fontSize = 20.sp, color = Color.Black)
             Spacer(modifier = Modifier.height(8.dp))
-            Button(onClick = onClick) {
+            Button(
+                onClick = onClick,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFFB497BD), // 按钮背景颜色
+                    contentColor = Color.White // 按钮文字颜色
+                )
+            ) {
                 Text("More")
             }
         }
