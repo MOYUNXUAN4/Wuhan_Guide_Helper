@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.text.style.TextAlign
 import com.example.wuhan_guide_helper.R
 import com.example.wuhan_guide_helper.foodActivity.FoodActivity
+import com.example.wuhan_guide_helper.hotel.HotelListActivity
 import com.example.wuhan_guide_helper.ui.theme.Wuhan_Guide_HelperTheme
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -101,7 +102,11 @@ fun TowerLocationScreen(onSearchClick: () -> Unit, context: android.content.Cont
                         .height(24.dp)
                         .width(1.dp)
                 )
-                IconButton(onClick = { /* TODO: Navigate to Hotel */ }) {
+                IconButton(onClick = {
+                    // 跳转到 HotelListActivity
+                    val intent = Intent(context, HotelListActivity::class.java)
+                    context.startActivity(intent)
+                }) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_hotel_btn),
                         contentDescription = null,

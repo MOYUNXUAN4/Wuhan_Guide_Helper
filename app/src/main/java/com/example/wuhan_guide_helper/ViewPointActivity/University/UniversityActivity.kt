@@ -24,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.example.wuhan_guide_helper.R
 import com.example.wuhan_guide_helper.foodActivity.FoodActivity
+import com.example.wuhan_guide_helper.hotel.HotelListActivity
 import com.example.wuhan_guide_helper.ui.theme.Wuhan_Guide_HelperTheme
 import com.google.accompanist.pager.*
 import kotlinx.coroutines.delay
@@ -59,7 +60,7 @@ fun TowerScreen(onShowOnMapClick: () -> Unit, context: android.content.Context) 
                             .padding(start = 16.dp)
                             .fillMaxWidth(),
                         textAlign = TextAlign.Start,
-                        fontWeight = FontWeight.Bold ,
+                        fontWeight = FontWeight.Bold,
                         color = Color.White
                     )
                 },
@@ -94,7 +95,11 @@ fun TowerScreen(onShowOnMapClick: () -> Unit, context: android.content.Context) 
                         .height(24.dp)
                         .width(1.dp)
                 )
-                IconButton(onClick = { /* TODO: Navigate to Hotel */ }) {
+                IconButton(onClick = {
+                    // 跳转到 HotelListActivity
+                    val intent = Intent(context, HotelListActivity::class.java)
+                    context.startActivity(intent)
+                }) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_hotel_btn),
                         contentDescription = null,

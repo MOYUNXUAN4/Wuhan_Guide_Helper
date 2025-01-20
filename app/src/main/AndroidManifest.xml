@@ -123,6 +123,28 @@
             android:exported="true" />
 
 
+        <activity
+            android:name=".hotel.HotelDetailActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".hotel.HotelListActivity"
+            android:exported="true" />
+
+        <activity
+            android:name=".hotel.HotelLocation"
+            android:exported="true" />
+
+        <activity
+            android:name=".hotel.HotelLocationScreen"
+            android:exported="true" />
+
+
+
+
+
+
+
 
     </application>
 

@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import com.example.wuhan_guide_helper.user.UserSignIn
 import com.example.wuhan_guide_helper.databaseUi.ContextActivity
 import com.example.wuhan_guide_helper.foodActivity.FoodActivity
+import com.example.wuhan_guide_helper.hotel.HotelListActivity
 import com.example.wuhan_guide_helper.internet.TransferActivity
 import com.example.wuhan_guide_helper.ui.theme.Wuhan_Guide_HelperTheme
 import com.example.wuhan_guide_helper.user.UserDetailActivity
@@ -298,8 +299,8 @@ fun CategoryButton(category: String, onSeeMoreClick: () -> Unit) {
         "Food" -> R.drawable.ic_restaurant_btn
         "Viewpoint" -> R.drawable.ic_viewpoint_btn
         "Hotel" -> R.drawable.ic_hotel_btn
-        "Exchange" -> R.drawable.ic_transalate_btn // 使用原来的翻译图标
-        "Tips" -> R.drawable.emergency // 使用原来的紧急图标
+        "Exchange" -> R.drawable.ic_transalate_btn
+        "Tips" -> R.drawable.emergency
         else -> R.drawable.default_icon
     }
 
@@ -311,11 +312,15 @@ fun CategoryButton(category: String, onSeeMoreClick: () -> Unit) {
                     context.startActivity(intent)
                 }
                 "Viewpoint" -> onSeeMoreClick()
-                "Tips" -> { // 修改为跳转到 Tips 页面
+                "Hotel" -> { // 跳转到 HotelListActivity
+                    val intent = Intent(context, HotelListActivity::class.java)
+                    context.startActivity(intent)
+                }
+                "Tips" -> {
                     val intent = Intent(context, ContextActivity::class.java)
                     context.startActivity(intent)
                 }
-                "Exchange" -> { // 修改为跳转到翻译页面
+                "Exchange" -> {
                     val intent = Intent(context, TransferActivity::class.java)
                     context.startActivity(intent)
                 }
