@@ -142,8 +142,8 @@ fun HotelCard(hotelName: String, imageRes: Int, onClick: () -> Unit) {
             Button(
                 onClick = onClick,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFB497BD), // 按钮背景颜色
-                    contentColor = Color.White // 按钮文字颜色
+                    containerColor = Color(0xFFB497BD),
+                    contentColor = Color.White
                 )
             ) {
                 Text("More")
